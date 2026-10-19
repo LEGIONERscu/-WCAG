@@ -1,0 +1,691 @@
+<!DOCTYPE html><html lang="en" data-layout="default" data-shoelace-version="2.20.1" class="flavor-html sl-scroll-lock" style="--sl-scroll-lock-size: 0px;"><head><style type="text/css">.turbo-progress-bar {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #0076ff;
+  z-index: 2147483647;
+  transition:
+    width 300ms ease-out,
+    opacity 150ms 150ms ease-in;
+  transform: translate3d(0, 0, 0);
+}
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hand-crafted custom elements for any occasion.">
+    <title>Shoelace: A forward-thinking library of web components.</title>
+
+    <meta name="turbo-cache-control">
+
+    <link rel="stylesheet" href="/assets/styles/docs.css">
+    <link rel="stylesheet" href="/assets/styles/code-previews.css">
+    <link rel="stylesheet" href="/assets/styles/search.css">
+
+    <link rel="icon" href="/assets/images/logo.svg" type="image/x-icon">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="shoelace_style">
+    <meta name="twitter:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <meta property="og:url" content="https://shoelace.style/">
+    <meta property="og:title" content="Shoelace: A forward-thinking library of web components.">
+    <meta property="og:description" content="Hand-crafted custom elements for any occasion.">
+    <meta property="og:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <link rel="stylesheet" href="/dist/themes/light.css">
+    <link rel="stylesheet" href="/dist/themes/dark.css">
+    <script type="module" src="/dist/shoelace-autoloader.js"></script>
+
+    <script>
+      (() => {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.classList.toggle(
+          'sl-theme-dark',
+          theme === 'dark' || (theme === 'auto' && prefersDark)
+        );
+      })();
+    </script>
+
+    <script src="/assets/scripts/turbo.js" type="module"></script>
+    <script src="/assets/scripts/docs.js" defer=""></script>
+    <script src="/assets/scripts/code-previews.js" defer=""></script>
+    <script src="/assets/scripts/lunr.js" defer=""></script>
+    <script src="/assets/scripts/search.js" defer=""></script>
+  </head>
+  <body>
+    <a id="skip-to-main" class="visually-hidden active-link" href="#main-content" data-smooth-link="false">
+      Skip to main content
+    </a>
+
+    <button id="menu-toggle" type="button" aria-label="Menu">
+      <svg width="148" height="148" viewBox="0 0 148 148" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="18" fill="none" fill-rule="evenodd" stroke-linecap="round">
+          <path d="M9.5 125.5h129M9.5 74.5h129M9.5 23.5h129"></path>
+        </g>
+      </svg>
+    </button>
+
+    <div id="icon-toolbar">
+      <a href="https://github.com/shoelace-style/shoelace" title="View Shoelace on GitHub" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="github" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <a href="https://twitter.com/shoelace_style" title="Follow Shoelace on Twitter" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="twitter" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <sl-dropdown id="theme-selector" placement="bottom-end" distance="3">
+        <sl-button slot="trigger" size="small" variant="text" caret="" title="Press \ to toggle" data-optional="" data-valid="">
+          <sl-icon class="only-light" name="sun-fill" aria-hidden="true" library="default"></sl-icon>
+          <sl-icon class="only-dark" name="moon-fill" aria-hidden="true" library="default"></sl-icon>
+        </sl-button>
+        <sl-menu role="menu">
+          <sl-menu-item type="checkbox" value="light" tabindex="0" role="menuitemcheckbox" aria-checked="false" aria-disabled="false">Light</sl-menu-item>
+          <sl-menu-item type="checkbox" value="dark" tabindex="-1" role="menuitemcheckbox" aria-checked="false" aria-disabled="false">Dark</sl-menu-item>
+          <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+          <sl-menu-item type="checkbox" value="auto" tabindex="-1" role="menuitemcheckbox" aria-checked="true" aria-disabled="false" checked="">System</sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
+    </div>
+
+    <sl-dialog id="wa-dialog" label="Shoelace is now Web Awesome!" open="">
+      <div class="dialog-billboard">
+        <div class="dialog-billboard-content">
+          <svg class="wa-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true">
+            <path fill="currentColor" d="M372.2 116C372.2 136.9 359.8 155 342 163.2L448 256L552.4 235.1C547.1 227.4 544 218 544 208C544 181.5 565.5 160 592 160C618.5 160 640 181.5 640 208C640 234 619.4 255.1 593.6 256L481 506.3C470.7 529.3 447.8 544 422.6 544L217.4 544C192.2 544 169.4 529.2 159 506.3L46.4 256C20.6 255.1 0 234 0 208C0 181.5 21.5 160 48 160C74.5 160 96 181.5 96 208C96 218.1 92.9 227.4 87.6 235.1L192 256L298.1 163.1C280.4 154.8 268.1 136.8 268.1 116C268.1 87.3 291.4 64 320.1 64C348.8 64 372.1 87.3 372.1 116L372.2 116z"></path>
+          </svg>
+
+          <h2>
+            Shoelace is now
+            <a href="https://webawesome.com?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="active-link external-link" rel="noopener noreferrer">Web Awesome</a>!
+          </h2>
+        </div>
+      </div>
+
+      <div class="dialog-body">
+        <p>
+          Web Awesome has an even bigger library of free
+          <a href="https://webawesome.com/docs/components/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">components</a>. Plus
+          <a href="https://webawesome.com/docs/themes/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">themes</a>,
+          <a href="https://webawesome.com/docs/utilities/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">utilities</a>,
+          <a href="https://webawesome.com/docs/patterns/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">patterns</a>, and more!
+        </p>
+
+        <p><strong>Still open source. Still free. With more Awesome.</strong></p>
+
+        <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+
+        <div class="dialog-actions">
+          <div class="wa-ctas">
+            <sl-button variant="primary" size="large" class="wa-pro-cta" href="https://webawesome.com/docs/resources/migrating-from-shoelace?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" data-optional="" data-valid="">
+              Migrate to Web Awesome!
+              <sl-icon slot="suffix" name="arrow-right" aria-hidden="true" library="default"></sl-icon>
+            </sl-button>
+            <sl-button variant="text" class="close-wa-dialog" size="medium" data-optional="" data-valid="">No, thanks</sl-button>
+          </div>
+        </div>
+      </div>
+
+      <div slot="footer">
+        <div class="sl-status">
+          <strong>Shoelace Is Sunset with no active development</strong>
+          <p>Use Web Awesome for ongoing work, issues, and features.</p>
+        </div>
+      </div>
+    </sl-dialog>
+    <script>
+      if (!sessionStorage.getItem('wa-dialog-dismissed')) {
+        customElements.whenDefined('sl-dialog').then(() => {
+          const dialog = document.getElementById('wa-dialog');
+          const closeButton = dialog.querySelector('sl-button.close-wa-dialog');
+
+          closeButton.addEventListener('click', () => dialog.hide());
+          dialog.addEventListener(
+            'sl-after-hide',
+            () => {
+              sessionStorage.setItem('wa-dialog-dismissed', 'true');
+            },
+            { once: true }
+          );
+
+          dialog.show();
+        });
+      }
+    </script>
+
+    <aside id="sidebar" data-preserve-scroll="">
+      <header>
+        <a href="/" class="active-link">
+          <img src="/assets/images/wordmark.svg" alt="Shoelace">
+        </a>
+        <div class="sidebar-version">2.20.1</div>
+      </header>
+
+      <div class="sidebar-buttons">
+        <sl-button size="small" class="repo-button repo-button--github" href="https://github.com/shoelace-style/shoelace" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="github" aria-hidden="true" library="default"></sl-icon> Code
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--star" href="https://github.com/shoelace-style/shoelace/stargazers" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="star-fill" aria-hidden="true" library="default"></sl-icon> Star
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--twitter" href="https://twitter.com/shoelace_style" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="twitter" aria-hidden="true" library="default"></sl-icon> Follow
+        </sl-button>
+      </div>
+
+      <button class="search-box" type="button" title="Press / to search" aria-label="Search" data-plugin="search">
+        <sl-icon name="search" aria-hidden="true" library="default"></sl-icon>
+        <span>Search</span>
+      </button>
+
+      <nav>
+        <ul>
+          <li>
+            <h2>Getting Started</h2>
+            <ul>
+              <li><a href="/" class="active-link">Home</a></li>
+              <li><a href="/getting-started/installation">Installation</a></li>
+              <li><a href="/getting-started/usage">Usage</a></li>
+              <li><a href="/getting-started/themes">Themes</a></li>
+              <li><a href="/getting-started/customizing">Customizing</a></li>
+              <li><a href="/getting-started/form-controls">Form Controls</a></li>
+              <li><a href="/getting-started/localization">Localization</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Frameworks</h2>
+            <ul>
+              <li><a href="/frameworks/react">React</a></li>
+              <li><a href="/frameworks/vue">Vue</a></li>
+              <li><a href="/frameworks/angular">Angular</a></li>
+              <li><a href="/frameworks/svelte">Svelte</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Resources</h2>
+            <ul>
+              <li><a href="/resources/community">Community</a></li>
+              <li>
+                <a href="https://github.com/shoelace-style/shoelace/discussions" class="external-link" rel="noopener noreferrer" target="_blank">Help &amp; Support</a>
+              </li>
+              <li><a href="/resources/accessibility">Accessibility</a></li>
+              <li><a href="/resources/contributing">Contributing</a></li>
+              <li><a href="/resources/changelog">Changelog</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Components</h2>
+            <ul>
+              <li>
+                <a href="/components/alert"> Alert </a>
+              </li>
+
+              <li>
+                <a href="/components/animated-image"> Animated Image </a>
+              </li>
+
+              <li>
+                <a href="/components/animation"> Animation </a>
+              </li>
+
+              <li>
+                <a href="/components/avatar"> Avatar </a>
+              </li>
+
+              <li>
+                <a href="/components/badge"> Badge </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb"> Breadcrumb </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb-item"> Breadcrumb Item </a>
+              </li>
+
+              <li>
+                <a href="/components/button"> Button </a>
+              </li>
+
+              <li>
+                <a href="/components/button-group"> Button Group </a>
+              </li>
+
+              <li>
+                <a href="/components/card"> Card </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel"> Carousel </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel-item"> Carousel Item </a>
+              </li>
+
+              <li>
+                <a href="/components/checkbox"> Checkbox </a>
+              </li>
+
+              <li>
+                <a href="/components/color-picker"> Color Picker </a>
+              </li>
+
+              <li>
+                <a href="/components/copy-button"> Copy Button </a>
+              </li>
+
+              <li>
+                <a href="/components/details"> Details </a>
+              </li>
+
+              <li>
+                <a href="/components/dialog"> Dialog </a>
+              </li>
+
+              <li>
+                <a href="/components/divider"> Divider </a>
+              </li>
+
+              <li>
+                <a href="/components/drawer"> Drawer </a>
+              </li>
+
+              <li>
+                <a href="/components/dropdown"> Dropdown </a>
+              </li>
+
+              <li>
+                <a href="/components/format-bytes"> Format Bytes </a>
+              </li>
+
+              <li>
+                <a href="/components/format-date"> Format Date </a>
+              </li>
+
+              <li>
+                <a href="/components/format-number"> Format Number </a>
+              </li>
+
+              <li>
+                <a href="/components/icon"> Icon </a>
+              </li>
+
+              <li>
+                <a href="/components/icon-button"> Icon Button </a>
+              </li>
+
+              <li>
+                <a href="/components/image-comparer"> Image Comparer </a>
+              </li>
+
+              <li>
+                <a href="/components/include"> Include </a>
+              </li>
+
+              <li>
+                <a href="/components/input"> Input </a>
+              </li>
+
+              <li>
+                <a href="/components/menu"> Menu </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-item"> Menu Item </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-label"> Menu Label </a>
+              </li>
+
+              <li>
+                <a href="/components/mutation-observer"> Mutation Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/option"> Option </a>
+              </li>
+
+              <li>
+                <a href="/components/popup"> Popup </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-bar"> Progress Bar </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-ring"> Progress Ring </a>
+              </li>
+
+              <li>
+                <a href="/components/qr-code"> QR Code </a>
+              </li>
+
+              <li>
+                <a href="/components/radio"> Radio </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-button"> Radio Button </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-group"> Radio Group </a>
+              </li>
+
+              <li>
+                <a href="/components/range"> Range </a>
+              </li>
+
+              <li>
+                <a href="/components/rating"> Rating </a>
+              </li>
+
+              <li>
+                <a href="/components/relative-time"> Relative Time </a>
+              </li>
+
+              <li>
+                <a href="/components/resize-observer"> Resize Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/select"> Select </a>
+              </li>
+
+              <li>
+                <a href="/components/skeleton"> Skeleton </a>
+              </li>
+
+              <li>
+                <a href="/components/spinner"> Spinner </a>
+              </li>
+
+              <li>
+                <a href="/components/split-panel"> Split Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/switch"> Switch </a>
+              </li>
+
+              <li>
+                <a href="/components/tab"> Tab </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-group"> Tab Group </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-panel"> Tab Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/tag"> Tag </a>
+              </li>
+
+              <li>
+                <a href="/components/textarea"> Textarea </a>
+              </li>
+
+              <li>
+                <a href="/components/tooltip"> Tooltip </a>
+              </li>
+
+              <li>
+                <a href="/components/tree"> Tree </a>
+              </li>
+
+              <li>
+                <a href="/components/tree-item"> Tree Item </a>
+              </li>
+
+              <li>
+                <a href="/components/visually-hidden"> Visually Hidden </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <h2>Design Tokens</h2>
+            <ul>
+              <li><a href="/tokens/typography">Typography</a></li>
+              <li><a href="/tokens/color">Color</a></li>
+              <li><a href="/tokens/spacing">Spacing</a></li>
+              <li><a href="/tokens/elevation">Elevation</a></li>
+              <li><a href="/tokens/border-radius">Border Radius</a></li>
+              <li><a href="/tokens/transition">Transition</a></li>
+              <li><a href="/tokens/z-index">Z-index</a></li>
+              <li><a href="/tokens/more">More Tokens</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Tutorials</h2>
+            <ul>
+              <li><a href="/tutorials/integrating-with-astro">Integrating with Astro</a></li>
+              <li><a href="/tutorials/integrating-with-laravel">Integrating with Laravel</a></li>
+              <li><a href="/tutorials/integrating-with-nextjs">Integrating with NextJS</a></li>
+              <li><a href="/tutorials/integrating-with-rails">Integrating with Rails</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <a id="main-content" class="active-link"></a>
+      <article id="content" class="content">
+        <div class="content__body">
+          <div class="splash">
+            <div class="splash-start">
+              <img class="splash-logo" src="/assets/images/wordmark.svg" alt="Shoelace">
+              <h1><sl-visually-hidden>Shoelace:</sl-visually-hidden> A forward-thinking library of web components.</h1>
+              <ul>
+                <li>Works with all frameworks 🧩</li>
+                <li>Works with CDNs 🚛</li>
+                <li>Fully customizable with CSS 🎨</li>
+                <li>Includes a dark theme 🌛</li>
+                <li>Built with accessibility in mind ♿️</li>
+                <li>First-class <a href="/frameworks/react">React support</a> ⚛️</li>
+                <li>Built-in localization 💬</li>
+                <li>Open source 😸</li>
+                <li>
+                  <a href="https://blog.fontawesome.com/shoelace-joins-font-awesome/" class="external-link" rel="noopener noreferrer" target="_blank">More awesome than ever</a>
+                  <img src="/assets/images/awesome.svg" alt="Awesome emoji">
+                </li>
+              </ul>
+            </div>
+            <div class="splash-end">
+              <img class="splash-image" src="/assets/images/undraw-content-team.svg" alt="Cartoon of people assembling components while standing on a giant laptop.">
+            </div>
+          </div>
+          <div class="badges">
+            <p>
+              <a href="https://www.jsdelivr.com/package/npm/@shoelace-style/shoelace" class="external-link" rel="noopener noreferrer" target="_blank"><img src="https://data.jsdelivr.com/v1/package/npm/@shoelace-style/shoelace/badge" alt="jsDelivr"></a>
+              <a href="https://www.npmjs.com/package/@shoelace-style/shoelace" class="external-link" rel="noopener noreferrer" target="_blank"><img src="https://img.shields.io/npm/dw/@shoelace-style/shoelace?label=npm&amp;style=flat-square" alt="npm"></a>
+              <a href="https://github.com/shoelace-style/shoelace/blob/next/LICENSE.md" class="external-link" rel="noopener noreferrer" target="_blank"><img src="https://img.shields.io/badge/license-MIT-232323.svg?style=flat-square" alt="License"></a><br>
+              <a href="https://discord.gg/mg8f26C" class="external-link" rel="noopener noreferrer" target="_blank"><img src="https://img.shields.io/badge/Discord-Join%20the%20chat-5965f2.svg?style=flat-square&amp;logo=discord&amp;logoColor=white" alt="Discord"></a>
+              <a href="https://twitter.com/shoelace_style" class="external-link" rel="noopener noreferrer" target="_blank"><img src="https://img.shields.io/badge/Twitter-Follow-00acee.svg?style=flat-square&amp;logo=twitter&amp;logoColor=white" alt="Twitter"></a>
+              <a href="https://github.com/shoelace-style/shoelace" class="external-link" rel="noopener noreferrer" target="_blank"><img src="https://img.shields.io/badge/GitHub-Code-232323.svg?style=flat-square&amp;logo=github&amp;logoColor=white" alt="Sponsor"></a>
+            </p>
+          </div>
+          <h2 id="quick-start" class="anchor-heading">
+            Quick Start<a href="#quick-start" aria-label="Direct link to &quot;Quick Start&quot;"></a>
+          </h2>
+          <p>Add the following code to your page.</p>
+          <!-- prettier-ignore -->
+          <pre><code class="language-html" id="code-block-1"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-1"></sl-copy-button></pre>
+          <p>Now you have access to all of Shoelace’s components! Try adding a button:</p>
+
+          <div class="code-preview code-preview--expanded">
+            <div class="code-preview__preview">
+              <sl-button variant="default" size="medium" data-optional="" data-valid="">Click me</sl-button>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-1">
+              <div class="code-preview__source code-preview__source--html">
+                <pre><code class="language-html" id="code-block-2"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-button</span><span class="token punctuation">&gt;</span></span>Click me<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-button</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-2"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="true" aria-controls="code-preview-source-group-1">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div role="alert" class="callout callout--tip">
+            <p>
+              This will activate Shoelace’s experimental autoloader, which registers components on the fly as you use
+              them. To learn more about it, or for other ways to install Shoelace, refer to the
+              <a href="getting-started/installation">installation instructions</a>.
+            </p>
+          </div>
+          <h2 id="new-to-web-components" class="anchor-heading">
+            New to Web Components?<a href="#new-to-web-components" aria-label="Direct link to &quot;New to Web Components?&quot;"></a>
+          </h2>
+          <p>
+            <strong>TL;DR</strong> –&nbsp;we finally have a way to create
+            <a href="https://html.spec.whatwg.org/multipage/custom-elements.html" class="external-link" rel="noopener noreferrer" target="_blank">our own HTML elements</a>
+            and use them in any framework we want!
+          </p>
+          <p>
+            Thanks to the popularity of frameworks such as Angular, Vue, and React, component-driven development has
+            become a part of our every day lives. Components help us encapsulate styles and behaviors into reusable
+            building blocks. They make a lot of sense in terms of design, development, and testing.
+          </p>
+          <p>Unfortunately, <em>framework-specific</em> components fail us in a number of ways:</p>
+          <ul>
+            <li>You can only use them in the framework they’re designed for 🔒</li>
+            <li>Their lifespan is limited to that of the framework’s ⏳</li>
+            <li>
+              New frameworks/versions can lead to breaking changes, requiring substantial effort to update components 😭
+            </li>
+          </ul>
+          <p>
+            Web components solve these problems. They’re
+            <a href="https://caniuse.com/#feat=custom-elementsv1" class="active-link external-link" rel="noopener noreferrer" target="_blank">supported by all modern browsers</a>, they’re framework-agnostic, and they’re
+            <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components" class="external-link" rel="noopener noreferrer" target="_blank">part of the standard</a>, so we know they’ll be supported for many years to come.
+          </p>
+          <p>This is the technology that Shoelace is built on.</p>
+          <h2 id="what-problem-does-this-solve" class="anchor-heading">
+            What Problem Does This Solve?<a href="#what-problem-does-this-solve" aria-label="Direct link to &quot;What Problem Does This Solve?&quot;"></a>
+          </h2>
+          <p>
+            Shoelace provides a collection of professionally designed, highly customizable UI components built on a
+            framework agnostic technology. Why spend hundreds of hours (or more) building a design system from scratch?
+            Why make a component library that only works with one framework?
+          </p>
+          <p>With Shoelace, you can:</p>
+          <ul>
+            <li>Start building things faster (no need to roll your own buttons)</li>
+            <li>Build multiple apps with different frameworks that all share the same UI components</li>
+            <li>Fully customize components to match your existing designs</li>
+            <li>Incrementally adopt components as needed (no need to ditch your framework)</li>
+            <li>Upgrade or switch frameworks without rebuilding foundational components</li>
+          </ul>
+          <p>
+            If your organization is looking to build a design system,
+            <a href="https://medium.com/eightshapes-llc/and-you-thought-buttons-were-easy-26eb5b5c1871" class="external-link" rel="noopener noreferrer" target="_blank">Shoelace will save you thousands of dollars</a>. All the foundational components you need are right here, ready to be customized for your brand. And since
+            it’s built on web standards, browsers will continue to support it for many years to come.
+          </p>
+          <p>
+            Whether you use Shoelace as a starting point for your organization’s design system or for a fun personal
+            project, there’s no limit to what you can do with it.
+          </p>
+          <h2 id="browser-support" class="anchor-heading">
+            Browser Support<a href="#browser-support" aria-label="Direct link to &quot;Browser Support&quot;"></a>
+          </h2>
+          <p>Shoelace is tested in the latest two versions of the following browsers.</p>
+          <img src="/assets/images/chrome.png" alt="Chrome" width="64" height="64">
+          <img src="/assets/images/edge.png" alt="Edge" width="64" height="64">
+          <img src="/assets/images/firefox.png" alt="Firefox" width="64" height="64">
+          <img src="/assets/images/opera.png" alt="Opera" width="64" height="64">
+          <img src="/assets/images/safari.png" alt="Safari" width="64" height="64">
+          <p>Critical bug fixes in earlier versions will be addressed based on their severity and impact.</p>
+          <p>
+            If you need to support IE11 or pre-Chromium Edge, this library isn’t for you. Although web components can
+            (to some degree) be polyfilled for legacy browsers, supporting them is outside the scope of this project. If
+            you’re using Shoelace in such a browser, you’re gonna have a bad time. ⛷
+          </p>
+          <h2 id="license" class="anchor-heading">
+            License<a href="#license" aria-label="Direct link to &quot;License&quot;"></a>
+          </h2>
+          <p>
+            Shoelace was created in New Hampshire by
+            <a href="https://twitter.com/cory_laviska" class="external-link" rel="noopener noreferrer" target="_blank">Cory LaViska</a>. It’s available under the terms of the
+            <a href="https://github.com/shoelace-style/shoelace/blob/next/LICENSE.md" class="external-link" rel="noopener noreferrer" target="_blank">MIT license</a>.
+          </p>
+          <h2 id="attribution" class="anchor-heading">
+            Attribution<a href="#attribution" aria-label="Direct link to &quot;Attribution&quot;"></a>
+          </h2>
+          <p>Special thanks to the following projects and individuals that help make Shoelace possible.</p>
+          <ul>
+            <li>
+              Components are built with
+              <a href="https://lit.dev/" class="active-link external-link" rel="noopener noreferrer" target="_blank">Lit</a>
+            </li>
+            <li>
+              Component metadata is generated by the
+              <a href="https://github.com/open-wc/custom-elements-manifest" class="external-link" rel="noopener noreferrer" target="_blank">Custom Elements Manifest Analyzer</a>
+            </li>
+            <li>
+              Documentation is powered by
+              <a href="https://www.11ty.dev/" class="active-link external-link" rel="noopener noreferrer" target="_blank">11ty</a>
+            </li>
+            <li>
+              CDN services are provided by
+              <a href="https://www.jsdelivr.com/" class="active-link external-link" rel="noopener noreferrer" target="_blank">jsDelivr</a>
+            </li>
+            <li>
+              Color primitives are inspired by
+              <a href="https://tailwindcss.com/" class="active-link external-link" rel="noopener noreferrer" target="_blank">Tailwind</a>
+            </li>
+            <li>
+              Icons are courtesy of
+              <a href="https://icons.getbootstrap.com/" class="active-link external-link" rel="noopener noreferrer" target="_blank">Bootstrap Icons</a>
+            </li>
+            <li>
+              The homepage illustration is courtesy of
+              <a href="https://undraw.co/" class="active-link external-link" rel="noopener noreferrer" target="_blank">unDraw</a>
+            </li>
+            <li>
+              Positioning of dropdowns, tooltips, et al is handled by
+              <a href="https://floating-ui.com/" class="active-link external-link" rel="noopener noreferrer" target="_blank">Floating UI</a>
+            </li>
+            <li>
+              Animations are courtesy of
+              <a href="https://animate.style/" class="active-link external-link" rel="noopener noreferrer" target="_blank">animate.css</a>
+            </li>
+            <li>
+              Search is powered by
+              <a href="https://lunrjs.com/" class="active-link external-link" rel="noopener noreferrer" target="_blank">Lunr</a>
+            </li>
+            <li>
+              The Shoelace logo was designed with a single shoelace by
+              <a href="https://twitter.com/adamkolson" class="external-link" rel="noopener noreferrer" target="_blank">Adam K Olson</a>
+            </li>
+          </ul>
+        </div>
+      </article>
+    </main>
+  
+
+</body></html>

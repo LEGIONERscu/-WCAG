@@ -1,0 +1,596 @@
+<!DOCTYPE html><html lang="en" data-layout="default" data-shoelace-version="2.20.1" class="flavor-html sl-scroll-lock" style="--sl-scroll-lock-size: 0px;"><head><style type="text/css">.turbo-progress-bar {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #0076ff;
+  z-index: 2147483647;
+  transition:
+    width 300ms ease-out,
+    opacity 150ms 150ms ease-in;
+  transform: translate3d(0, 0, 0);
+}
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tips for using Shoelace in your Svelte app.">
+    <title>Svelte</title>
+
+    <meta name="turbo-cache-control">
+
+    <link rel="stylesheet" href="/assets/styles/docs.css">
+    <link rel="stylesheet" href="/assets/styles/code-previews.css">
+    <link rel="stylesheet" href="/assets/styles/search.css">
+
+    <link rel="icon" href="/assets/images/logo.svg" type="image/x-icon">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="shoelace_style">
+    <meta name="twitter:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <meta property="og:url" content="https://shoelace.style/frameworks/svelte/">
+    <meta property="og:title" content="Svelte">
+    <meta property="og:description" content="Tips for using Shoelace in your Svelte app.">
+    <meta property="og:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <link rel="stylesheet" href="/dist/themes/light.css">
+    <link rel="stylesheet" href="/dist/themes/dark.css">
+    <script type="module" src="/dist/shoelace-autoloader.js"></script>
+
+    <script>
+      (() => {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.classList.toggle(
+          'sl-theme-dark',
+          theme === 'dark' || (theme === 'auto' && prefersDark)
+        );
+      })();
+    </script>
+
+    <script src="/assets/scripts/turbo.js" type="module"></script>
+    <script src="/assets/scripts/docs.js" defer=""></script>
+    <script src="/assets/scripts/code-previews.js" defer=""></script>
+    <script src="/assets/scripts/lunr.js" defer=""></script>
+    <script src="/assets/scripts/search.js" defer=""></script>
+  </head>
+  <body>
+    <a id="skip-to-main" class="visually-hidden" href="#main-content" data-smooth-link="false">
+      Skip to main content
+    </a>
+
+    <button id="menu-toggle" type="button" aria-label="Menu">
+      <svg width="148" height="148" viewBox="0 0 148 148" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="18" fill="none" fill-rule="evenodd" stroke-linecap="round">
+          <path d="M9.5 125.5h129M9.5 74.5h129M9.5 23.5h129"></path>
+        </g>
+      </svg>
+    </button>
+
+    <div id="icon-toolbar">
+      <a href="https://github.com/shoelace-style/shoelace" title="View Shoelace on GitHub" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="github" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <a href="https://twitter.com/shoelace_style" title="Follow Shoelace on Twitter" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="twitter" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <sl-dropdown id="theme-selector" placement="bottom-end" distance="3">
+        <sl-button slot="trigger" size="small" variant="text" caret="" title="Press \ to toggle" data-optional="" data-valid="">
+          <sl-icon class="only-light" name="sun-fill" aria-hidden="true" library="default"></sl-icon>
+          <sl-icon class="only-dark" name="moon-fill" aria-hidden="true" library="default"></sl-icon>
+        </sl-button>
+        <sl-menu role="menu">
+          <sl-menu-item type="checkbox" value="light" tabindex="0" role="menuitemcheckbox" aria-checked="false" aria-disabled="false">Light</sl-menu-item>
+          <sl-menu-item type="checkbox" value="dark" tabindex="-1" role="menuitemcheckbox" aria-checked="false" aria-disabled="false">Dark</sl-menu-item>
+          <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+          <sl-menu-item type="checkbox" value="auto" tabindex="-1" role="menuitemcheckbox" aria-checked="true" aria-disabled="false" checked="">System</sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
+    </div>
+
+    <sl-dialog id="wa-dialog" label="Shoelace is now Web Awesome!" open="">
+      <div class="dialog-billboard">
+        <div class="dialog-billboard-content">
+          <svg class="wa-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true">
+            <path fill="currentColor" d="M372.2 116C372.2 136.9 359.8 155 342 163.2L448 256L552.4 235.1C547.1 227.4 544 218 544 208C544 181.5 565.5 160 592 160C618.5 160 640 181.5 640 208C640 234 619.4 255.1 593.6 256L481 506.3C470.7 529.3 447.8 544 422.6 544L217.4 544C192.2 544 169.4 529.2 159 506.3L46.4 256C20.6 255.1 0 234 0 208C0 181.5 21.5 160 48 160C74.5 160 96 181.5 96 208C96 218.1 92.9 227.4 87.6 235.1L192 256L298.1 163.1C280.4 154.8 268.1 136.8 268.1 116C268.1 87.3 291.4 64 320.1 64C348.8 64 372.1 87.3 372.1 116L372.2 116z"></path>
+          </svg>
+
+          <h2>
+            Shoelace is now
+            <a href="https://webawesome.com?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">Web Awesome</a>!
+          </h2>
+        </div>
+      </div>
+
+      <div class="dialog-body">
+        <p>
+          Web Awesome has an even bigger library of free
+          <a href="https://webawesome.com/docs/components/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">components</a>. Plus
+          <a href="https://webawesome.com/docs/themes/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">themes</a>,
+          <a href="https://webawesome.com/docs/utilities/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">utilities</a>,
+          <a href="https://webawesome.com/docs/patterns/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">patterns</a>, and more!
+        </p>
+
+        <p><strong>Still open source. Still free. With more Awesome.</strong></p>
+
+        <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+
+        <div class="dialog-actions">
+          <div class="wa-ctas">
+            <sl-button variant="primary" size="large" class="wa-pro-cta" href="https://webawesome.com/docs/resources/migrating-from-shoelace?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" data-optional="" data-valid="">
+              Migrate to Web Awesome!
+              <sl-icon slot="suffix" name="arrow-right" aria-hidden="true" library="default"></sl-icon>
+            </sl-button>
+            <sl-button variant="text" class="close-wa-dialog" size="medium" data-optional="" data-valid="">No, thanks</sl-button>
+          </div>
+        </div>
+      </div>
+
+      <div slot="footer">
+        <div class="sl-status">
+          <strong>Shoelace Is Sunset with no active development</strong>
+          <p>Use Web Awesome for ongoing work, issues, and features.</p>
+        </div>
+      </div>
+    </sl-dialog>
+    <script>
+      if (!sessionStorage.getItem('wa-dialog-dismissed')) {
+        customElements.whenDefined('sl-dialog').then(() => {
+          const dialog = document.getElementById('wa-dialog');
+          const closeButton = dialog.querySelector('sl-button.close-wa-dialog');
+
+          closeButton.addEventListener('click', () => dialog.hide());
+          dialog.addEventListener(
+            'sl-after-hide',
+            () => {
+              sessionStorage.setItem('wa-dialog-dismissed', 'true');
+            },
+            { once: true }
+          );
+
+          dialog.show();
+        });
+      }
+    </script>
+
+    <aside id="sidebar" data-preserve-scroll="">
+      <header>
+        <a href="/">
+          <img src="/assets/images/wordmark.svg" alt="Shoelace">
+        </a>
+        <div class="sidebar-version">2.20.1</div>
+      </header>
+
+      <div class="sidebar-buttons">
+        <sl-button size="small" class="repo-button repo-button--github" href="https://github.com/shoelace-style/shoelace" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="github" aria-hidden="true" library="default"></sl-icon> Code
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--star" href="https://github.com/shoelace-style/shoelace/stargazers" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="star-fill" aria-hidden="true" library="default"></sl-icon> Star
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--twitter" href="https://twitter.com/shoelace_style" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="twitter" aria-hidden="true" library="default"></sl-icon> Follow
+        </sl-button>
+      </div>
+
+      <button class="search-box" type="button" title="Press / to search" aria-label="Search" data-plugin="search">
+        <sl-icon name="search" aria-hidden="true" library="default"></sl-icon>
+        <span>Search</span>
+      </button>
+
+      <nav>
+        <ul>
+          <li>
+            <h2>Getting Started</h2>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/getting-started/installation">Installation</a></li>
+              <li><a href="/getting-started/usage">Usage</a></li>
+              <li><a href="/getting-started/themes">Themes</a></li>
+              <li><a href="/getting-started/customizing">Customizing</a></li>
+              <li><a href="/getting-started/form-controls">Form Controls</a></li>
+              <li><a href="/getting-started/localization">Localization</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Frameworks</h2>
+            <ul>
+              <li><a href="/frameworks/react">React</a></li>
+              <li><a href="/frameworks/vue">Vue</a></li>
+              <li><a href="/frameworks/angular">Angular</a></li>
+              <li><a href="/frameworks/svelte" class="active-link">Svelte</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Resources</h2>
+            <ul>
+              <li><a href="/resources/community">Community</a></li>
+              <li>
+                <a href="https://github.com/shoelace-style/shoelace/discussions" class="external-link" rel="noopener noreferrer" target="_blank">Help &amp; Support</a>
+              </li>
+              <li><a href="/resources/accessibility">Accessibility</a></li>
+              <li><a href="/resources/contributing">Contributing</a></li>
+              <li><a href="/resources/changelog">Changelog</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Components</h2>
+            <ul>
+              <li>
+                <a href="/components/alert"> Alert </a>
+              </li>
+
+              <li>
+                <a href="/components/animated-image"> Animated Image </a>
+              </li>
+
+              <li>
+                <a href="/components/animation"> Animation </a>
+              </li>
+
+              <li>
+                <a href="/components/avatar"> Avatar </a>
+              </li>
+
+              <li>
+                <a href="/components/badge"> Badge </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb"> Breadcrumb </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb-item"> Breadcrumb Item </a>
+              </li>
+
+              <li>
+                <a href="/components/button"> Button </a>
+              </li>
+
+              <li>
+                <a href="/components/button-group"> Button Group </a>
+              </li>
+
+              <li>
+                <a href="/components/card"> Card </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel"> Carousel </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel-item"> Carousel Item </a>
+              </li>
+
+              <li>
+                <a href="/components/checkbox"> Checkbox </a>
+              </li>
+
+              <li>
+                <a href="/components/color-picker"> Color Picker </a>
+              </li>
+
+              <li>
+                <a href="/components/copy-button"> Copy Button </a>
+              </li>
+
+              <li>
+                <a href="/components/details"> Details </a>
+              </li>
+
+              <li>
+                <a href="/components/dialog"> Dialog </a>
+              </li>
+
+              <li>
+                <a href="/components/divider"> Divider </a>
+              </li>
+
+              <li>
+                <a href="/components/drawer"> Drawer </a>
+              </li>
+
+              <li>
+                <a href="/components/dropdown"> Dropdown </a>
+              </li>
+
+              <li>
+                <a href="/components/format-bytes"> Format Bytes </a>
+              </li>
+
+              <li>
+                <a href="/components/format-date"> Format Date </a>
+              </li>
+
+              <li>
+                <a href="/components/format-number"> Format Number </a>
+              </li>
+
+              <li>
+                <a href="/components/icon"> Icon </a>
+              </li>
+
+              <li>
+                <a href="/components/icon-button"> Icon Button </a>
+              </li>
+
+              <li>
+                <a href="/components/image-comparer"> Image Comparer </a>
+              </li>
+
+              <li>
+                <a href="/components/include"> Include </a>
+              </li>
+
+              <li>
+                <a href="/components/input"> Input </a>
+              </li>
+
+              <li>
+                <a href="/components/menu"> Menu </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-item"> Menu Item </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-label"> Menu Label </a>
+              </li>
+
+              <li>
+                <a href="/components/mutation-observer"> Mutation Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/option"> Option </a>
+              </li>
+
+              <li>
+                <a href="/components/popup"> Popup </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-bar"> Progress Bar </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-ring"> Progress Ring </a>
+              </li>
+
+              <li>
+                <a href="/components/qr-code"> QR Code </a>
+              </li>
+
+              <li>
+                <a href="/components/radio"> Radio </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-button"> Radio Button </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-group"> Radio Group </a>
+              </li>
+
+              <li>
+                <a href="/components/range"> Range </a>
+              </li>
+
+              <li>
+                <a href="/components/rating"> Rating </a>
+              </li>
+
+              <li>
+                <a href="/components/relative-time"> Relative Time </a>
+              </li>
+
+              <li>
+                <a href="/components/resize-observer"> Resize Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/select"> Select </a>
+              </li>
+
+              <li>
+                <a href="/components/skeleton"> Skeleton </a>
+              </li>
+
+              <li>
+                <a href="/components/spinner"> Spinner </a>
+              </li>
+
+              <li>
+                <a href="/components/split-panel"> Split Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/switch"> Switch </a>
+              </li>
+
+              <li>
+                <a href="/components/tab"> Tab </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-group"> Tab Group </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-panel"> Tab Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/tag"> Tag </a>
+              </li>
+
+              <li>
+                <a href="/components/textarea"> Textarea </a>
+              </li>
+
+              <li>
+                <a href="/components/tooltip"> Tooltip </a>
+              </li>
+
+              <li>
+                <a href="/components/tree"> Tree </a>
+              </li>
+
+              <li>
+                <a href="/components/tree-item"> Tree Item </a>
+              </li>
+
+              <li>
+                <a href="/components/visually-hidden"> Visually Hidden </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <h2>Design Tokens</h2>
+            <ul>
+              <li><a href="/tokens/typography">Typography</a></li>
+              <li><a href="/tokens/color">Color</a></li>
+              <li><a href="/tokens/spacing">Spacing</a></li>
+              <li><a href="/tokens/elevation">Elevation</a></li>
+              <li><a href="/tokens/border-radius">Border Radius</a></li>
+              <li><a href="/tokens/transition">Transition</a></li>
+              <li><a href="/tokens/z-index">Z-index</a></li>
+              <li><a href="/tokens/more">More Tokens</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Tutorials</h2>
+            <ul>
+              <li><a href="/tutorials/integrating-with-astro">Integrating with Astro</a></li>
+              <li><a href="/tutorials/integrating-with-laravel">Integrating with Laravel</a></li>
+              <li><a href="/tutorials/integrating-with-nextjs">Integrating with NextJS</a></li>
+              <li><a href="/tutorials/integrating-with-rails">Integrating with Rails</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <a id="main-content"></a>
+      <article id="content" class="content content--with-toc">
+        <div class="content__toc">
+          <ul>
+            <li class="top"><a href="#">Svelte</a></li>
+            <li data-level="2"><a href="#installation" class="active">Installation</a></li>
+            <li data-level="2"><a href="#usage">Usage</a></li>
+            <li data-level="3"><a href="#qr-code-generator-example">QR code generator example</a></li>
+            <li data-level="3"><a href="#two-way-binding">Two-way Binding</a></li>
+            <li data-level="3"><a href="#slots">Slots</a></li>
+          </ul>
+        </div>
+
+        <div class="content__body">
+          <h1>Svelte</h1>
+          <p>
+            Svelte
+            <a href="https://custom-elements-everywhere.com/#svelte" class="external-link" rel="noopener noreferrer" target="_blank">plays nice</a>
+            with custom elements, so you can use Shoelace in your Svelte apps with ease.
+          </p>
+          <h2 id="installation" class="anchor-heading">
+            Installation<a href="#installation" aria-label="Direct link to &quot;Installation&quot;"></a>
+          </h2>
+          <p>To add Shoelace to your Svelte app, install the package from npm.</p>
+          <pre><code class="language-bash" id="code-block-81"><span class="token function">npm</span> <span class="token function">install</span> @shoelace-style/shoelace
+</code><sl-copy-button class="copy-code-button" from="code-block-81"></sl-copy-button></pre>
+          <p>
+            Next, <a href="/getting-started/themes">include a theme</a> and set the
+            <a href="/getting-started/installation#setting-the-base-path">base path</a> for icons and other assets. In
+            this example, we’ll import the light theme and use the CDN as a base path.
+          </p>
+          <pre><code class="language-jsx" id="code-block-82"><span class="token comment">// main.js or main.ts</span>
+<span class="token keyword">import</span> <span class="token string">'@shoelace-style/shoelace/dist/themes/light.css'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> setBasePath <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/utilities/base-path'</span><span class="token punctuation">;</span>
+
+<span class="token function">setBasePath</span><span class="token punctuation">(</span><span class="token string">'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-82"></sl-copy-button></pre>
+          <div role="alert" class="callout callout--tip">
+            <p>
+              If you’d rather not use the CDN for assets, you can create a build task that copies
+              <code>node_modules/@shoelace-style/shoelace/dist/assets</code> into a public folder in your app. Then you
+              can point the base path to that folder instead.
+            </p>
+          </div>
+          <h2 id="usage" class="anchor-heading">Usage<a href="#usage" aria-label="Direct link to &quot;Usage&quot;"></a></h2>
+          <h3 id="qr-code-generator-example" class="anchor-heading">
+            QR code generator example<a href="#qr-code-generator-example" aria-label="Direct link to &quot;QR code generator example&quot;"></a>
+          </h3>
+          <pre><code class="language-jsx" id="code-block-83"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">Live editing</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-input</span> <span class="token attr-name">label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Message<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>message<span class="token punctuation">}</span></span> <span class="token attr-name">oninput</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token parameter">event</span> <span class="token operator">=&gt;</span> message <span class="token operator">=</span> event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value<span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-input</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-alert</span> <span class="token attr-name">open</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-icon</span> <span class="token attr-name">slot</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>icon<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>info-circle<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-icon</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token punctuation">{</span>message<span class="token punctuation">}</span><span class="token plain-text">
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-alert</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  import '@shoelace-style/shoelace/dist/components/alert/alert.js'
+  import '@shoelace-style/shoelace/dist/components/input/input.js';
+
+  let message = $state('')
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-83"></sl-copy-button></pre>
+          <h3 id="two-way-binding" class="anchor-heading">
+            Two-way Binding<a href="#two-way-binding" aria-label="Direct link to &quot;Two-way Binding&quot;"></a>
+          </h3>
+          <p>
+            One caveat is there’s currently Svelte only supports <code>bind:value</code> directive in
+            <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> and <code>&lt;select&gt;</code>, but you can still
+            achieve two-way binding manually.
+          </p>
+          <pre><code class="language-jsx" id="code-block-84"><span class="token comment">// ❌ These do not work</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-input</span> <span class="token attr-name"><span class="token namespace">bind:</span>value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-input</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-select</span> <span class="token attr-name"><span class="token namespace">bind:</span>value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>job<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>designer<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">Designer</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-option</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>developer<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">Developer</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-option</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-select</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">// ✅ These are a bit longer, but work</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-input</span> <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>name<span class="token punctuation">}</span></span> <span class="token attr-name">oninput</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token parameter">event</span> <span class="token operator">=&gt;</span> name <span class="token operator">=</span> event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value<span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-input</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-select</span> <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>job<span class="token punctuation">}</span></span> <span class="token attr-name">onsl-input</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token parameter">event</span> <span class="token operator">=&gt;</span> job <span class="token operator">=</span> event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value<span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>designer<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">Designer</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-option</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>developer<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">Developer</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-option</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-select</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-84"></sl-copy-button></pre>
+          <div role="alert" class="callout callout--tip">
+            <p>
+              Are you using Shoelace with Svelte?
+              <a href="https://github.com/shoelace-style/shoelace/blob/next/docs/frameworks/svelte.md" class="external-link" rel="noopener noreferrer" target="_blank">Help us improve this page!</a>
+            </p>
+          </div>
+          <h3 id="slots" class="anchor-heading">Slots<a href="#slots" aria-label="Direct link to &quot;Slots&quot;"></a></h3>
+          <p>
+            Slots in Shoelace/web components are functionally the same as basic slots in Svelte. Slots can be assigned
+            to elements using the <code>slot</code> attribute followed by the name of the slot it is being assigned to.
+          </p>
+          <p>Here is an example:</p>
+          <pre><code class="language-jsx" id="code-block-85"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-drawer</span> <span class="token attr-name">label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Drawer<span class="token punctuation">"</span></span> <span class="token attr-name">placement</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>start<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>drawer-placement-start<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">bind:</span>open</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>drawerIsOpen<span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  This drawer slides in from the start.
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">slot</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>footer<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-button</span> <span class="token attr-name">variant</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>primary<span class="token punctuation">"</span></span> <span class="token attr-name">onclick</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>drawerIsOpen <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      Close
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-button</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-drawer</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-85"></sl-copy-button></pre>
+        </div>
+      </article>
+    </main>
+  
+
+</body></html>

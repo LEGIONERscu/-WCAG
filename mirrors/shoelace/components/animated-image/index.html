@@ -1,0 +1,1067 @@
+<!DOCTYPE html><html lang="en" data-layout="component" data-shoelace-version="2.20.1" class="flavor-html sl-scroll-lock" style="--sl-scroll-lock-size: 0px;"><head><style type="text/css">.turbo-progress-bar {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #0076ff;
+  z-index: 2147483647;
+  transition:
+    width 300ms ease-out,
+    opacity 150ms 150ms ease-in;
+  transform: translate3d(0, 0, 0);
+}
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A component for displaying animated GIFs and WEBPs that play and pause on interaction.">
+    <title>Animated Image</title>
+
+    <meta name="turbo-cache-control">
+
+    <link rel="stylesheet" href="/assets/styles/docs.css">
+    <link rel="stylesheet" href="/assets/styles/code-previews.css">
+    <link rel="stylesheet" href="/assets/styles/search.css">
+
+    <link rel="icon" href="/assets/images/logo.svg" type="image/x-icon">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="shoelace_style">
+    <meta name="twitter:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <meta property="og:url" content="https://shoelace.style/components/animated-image/">
+    <meta property="og:title" content="Animated Image">
+    <meta property="og:description" content="A component for displaying animated GIFs and WEBPs that play and pause on interaction.">
+    <meta property="og:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <link rel="stylesheet" href="/dist/themes/light.css">
+    <link rel="stylesheet" href="/dist/themes/dark.css">
+    <script type="module" src="/dist/shoelace-autoloader.js"></script>
+
+    <script>
+      (() => {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.classList.toggle(
+          'sl-theme-dark',
+          theme === 'dark' || (theme === 'auto' && prefersDark)
+        );
+      })();
+    </script>
+
+    <script src="/assets/scripts/turbo.js" type="module"></script>
+    <script src="/assets/scripts/docs.js" defer=""></script>
+    <script src="/assets/scripts/code-previews.js" defer=""></script>
+    <script src="/assets/scripts/lunr.js" defer=""></script>
+    <script src="/assets/scripts/search.js" defer=""></script>
+  </head>
+  <body>
+    <a id="skip-to-main" class="visually-hidden" href="#main-content" data-smooth-link="false">
+      Skip to main content
+    </a>
+
+    <button id="menu-toggle" type="button" aria-label="Menu">
+      <svg width="148" height="148" viewBox="0 0 148 148" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="18" fill="none" fill-rule="evenodd" stroke-linecap="round">
+          <path d="M9.5 125.5h129M9.5 74.5h129M9.5 23.5h129"></path>
+        </g>
+      </svg>
+    </button>
+
+    <div id="icon-toolbar">
+      <a href="https://github.com/shoelace-style/shoelace" title="View Shoelace on GitHub" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="github" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <a href="https://twitter.com/shoelace_style" title="Follow Shoelace on Twitter" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="twitter" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <sl-dropdown id="theme-selector" placement="bottom-end" distance="3">
+        <sl-button slot="trigger" size="small" variant="text" caret="" title="Press \ to toggle" data-optional="" data-valid="">
+          <sl-icon class="only-light" name="sun-fill" aria-hidden="true" library="default"></sl-icon>
+          <sl-icon class="only-dark" name="moon-fill" aria-hidden="true" library="default"></sl-icon>
+        </sl-button>
+        <sl-menu role="menu">
+          <sl-menu-item type="checkbox" value="light" role="menuitemcheckbox" aria-checked="false" aria-disabled="false" tabindex="0">Light</sl-menu-item>
+          <sl-menu-item type="checkbox" value="dark" role="menuitemcheckbox" aria-checked="false" aria-disabled="false" tabindex="-1">Dark</sl-menu-item>
+          <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+          <sl-menu-item type="checkbox" value="auto" role="menuitemcheckbox" aria-checked="true" aria-disabled="false" checked="" tabindex="-1">System</sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
+    </div>
+
+    <sl-dialog id="wa-dialog" label="Shoelace is now Web Awesome!" open="">
+      <div class="dialog-billboard">
+        <div class="dialog-billboard-content">
+          <svg class="wa-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true">
+            <path fill="currentColor" d="M372.2 116C372.2 136.9 359.8 155 342 163.2L448 256L552.4 235.1C547.1 227.4 544 218 544 208C544 181.5 565.5 160 592 160C618.5 160 640 181.5 640 208C640 234 619.4 255.1 593.6 256L481 506.3C470.7 529.3 447.8 544 422.6 544L217.4 544C192.2 544 169.4 529.2 159 506.3L46.4 256C20.6 255.1 0 234 0 208C0 181.5 21.5 160 48 160C74.5 160 96 181.5 96 208C96 218.1 92.9 227.4 87.6 235.1L192 256L298.1 163.1C280.4 154.8 268.1 136.8 268.1 116C268.1 87.3 291.4 64 320.1 64C348.8 64 372.1 87.3 372.1 116L372.2 116z"></path>
+          </svg>
+
+          <h2>
+            Shoelace is now
+            <a href="https://webawesome.com?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">Web Awesome</a>!
+          </h2>
+        </div>
+      </div>
+
+      <div class="dialog-body">
+        <p>
+          Web Awesome has an even bigger library of free
+          <a href="https://webawesome.com/docs/components/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">components</a>. Plus
+          <a href="https://webawesome.com/docs/themes/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">themes</a>,
+          <a href="https://webawesome.com/docs/utilities/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">utilities</a>,
+          <a href="https://webawesome.com/docs/patterns/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">patterns</a>, and more!
+        </p>
+
+        <p><strong>Still open source. Still free. With more Awesome.</strong></p>
+
+        <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+
+        <div class="dialog-actions">
+          <div class="wa-ctas">
+            <sl-button variant="primary" size="large" class="wa-pro-cta" href="https://webawesome.com/docs/resources/migrating-from-shoelace?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" data-optional="" data-valid="">
+              Migrate to Web Awesome!
+              <sl-icon slot="suffix" name="arrow-right" aria-hidden="true" library="default"></sl-icon>
+            </sl-button>
+            <sl-button variant="text" class="close-wa-dialog" size="medium" data-optional="" data-valid="">No, thanks</sl-button>
+          </div>
+        </div>
+      </div>
+
+      <div slot="footer">
+        <div class="sl-status">
+          <strong>Shoelace Is Sunset with no active development</strong>
+          <p>Use Web Awesome for ongoing work, issues, and features.</p>
+        </div>
+      </div>
+    </sl-dialog>
+    <script>
+      if (!sessionStorage.getItem('wa-dialog-dismissed')) {
+        customElements.whenDefined('sl-dialog').then(() => {
+          const dialog = document.getElementById('wa-dialog');
+          const closeButton = dialog.querySelector('sl-button.close-wa-dialog');
+
+          closeButton.addEventListener('click', () => dialog.hide());
+          dialog.addEventListener(
+            'sl-after-hide',
+            () => {
+              sessionStorage.setItem('wa-dialog-dismissed', 'true');
+            },
+            { once: true }
+          );
+
+          dialog.show();
+        });
+      }
+    </script>
+
+    <aside id="sidebar" data-preserve-scroll="">
+      <header>
+        <a href="/">
+          <img src="/assets/images/wordmark.svg" alt="Shoelace">
+        </a>
+        <div class="sidebar-version">2.20.1</div>
+      </header>
+
+      <div class="sidebar-buttons">
+        <sl-button size="small" class="repo-button repo-button--github" href="https://github.com/shoelace-style/shoelace" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="github" aria-hidden="true" library="default"></sl-icon> Code
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--star" href="https://github.com/shoelace-style/shoelace/stargazers" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="star-fill" aria-hidden="true" library="default"></sl-icon> Star
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--twitter" href="https://twitter.com/shoelace_style" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="twitter" aria-hidden="true" library="default"></sl-icon> Follow
+        </sl-button>
+      </div>
+
+      <button class="search-box" type="button" title="Press / to search" aria-label="Search" data-plugin="search">
+        <sl-icon name="search" aria-hidden="true" library="default"></sl-icon>
+        <span>Search</span>
+      </button>
+
+      <nav>
+        <ul>
+          <li>
+            <h2>Getting Started</h2>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/getting-started/installation">Installation</a></li>
+              <li><a href="/getting-started/usage">Usage</a></li>
+              <li><a href="/getting-started/themes">Themes</a></li>
+              <li><a href="/getting-started/customizing">Customizing</a></li>
+              <li><a href="/getting-started/form-controls">Form Controls</a></li>
+              <li><a href="/getting-started/localization">Localization</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Frameworks</h2>
+            <ul>
+              <li><a href="/frameworks/react">React</a></li>
+              <li><a href="/frameworks/vue">Vue</a></li>
+              <li><a href="/frameworks/angular">Angular</a></li>
+              <li><a href="/frameworks/svelte">Svelte</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Resources</h2>
+            <ul>
+              <li><a href="/resources/community">Community</a></li>
+              <li>
+                <a href="https://github.com/shoelace-style/shoelace/discussions" class="external-link" rel="noopener noreferrer" target="_blank">Help &amp; Support</a>
+              </li>
+              <li><a href="/resources/accessibility">Accessibility</a></li>
+              <li><a href="/resources/contributing">Contributing</a></li>
+              <li><a href="/resources/changelog">Changelog</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Components</h2>
+            <ul>
+              <li>
+                <a href="/components/alert"> Alert </a>
+              </li>
+
+              <li>
+                <a href="/components/animated-image" class="active-link"> Animated Image </a>
+              </li>
+
+              <li>
+                <a href="/components/animation"> Animation </a>
+              </li>
+
+              <li>
+                <a href="/components/avatar"> Avatar </a>
+              </li>
+
+              <li>
+                <a href="/components/badge"> Badge </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb"> Breadcrumb </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb-item"> Breadcrumb Item </a>
+              </li>
+
+              <li>
+                <a href="/components/button"> Button </a>
+              </li>
+
+              <li>
+                <a href="/components/button-group"> Button Group </a>
+              </li>
+
+              <li>
+                <a href="/components/card"> Card </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel"> Carousel </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel-item"> Carousel Item </a>
+              </li>
+
+              <li>
+                <a href="/components/checkbox"> Checkbox </a>
+              </li>
+
+              <li>
+                <a href="/components/color-picker"> Color Picker </a>
+              </li>
+
+              <li>
+                <a href="/components/copy-button"> Copy Button </a>
+              </li>
+
+              <li>
+                <a href="/components/details"> Details </a>
+              </li>
+
+              <li>
+                <a href="/components/dialog"> Dialog </a>
+              </li>
+
+              <li>
+                <a href="/components/divider"> Divider </a>
+              </li>
+
+              <li>
+                <a href="/components/drawer"> Drawer </a>
+              </li>
+
+              <li>
+                <a href="/components/dropdown"> Dropdown </a>
+              </li>
+
+              <li>
+                <a href="/components/format-bytes"> Format Bytes </a>
+              </li>
+
+              <li>
+                <a href="/components/format-date"> Format Date </a>
+              </li>
+
+              <li>
+                <a href="/components/format-number"> Format Number </a>
+              </li>
+
+              <li>
+                <a href="/components/icon"> Icon </a>
+              </li>
+
+              <li>
+                <a href="/components/icon-button"> Icon Button </a>
+              </li>
+
+              <li>
+                <a href="/components/image-comparer"> Image Comparer </a>
+              </li>
+
+              <li>
+                <a href="/components/include"> Include </a>
+              </li>
+
+              <li>
+                <a href="/components/input"> Input </a>
+              </li>
+
+              <li>
+                <a href="/components/menu"> Menu </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-item"> Menu Item </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-label"> Menu Label </a>
+              </li>
+
+              <li>
+                <a href="/components/mutation-observer"> Mutation Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/option"> Option </a>
+              </li>
+
+              <li>
+                <a href="/components/popup"> Popup </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-bar"> Progress Bar </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-ring"> Progress Ring </a>
+              </li>
+
+              <li>
+                <a href="/components/qr-code"> QR Code </a>
+              </li>
+
+              <li>
+                <a href="/components/radio"> Radio </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-button"> Radio Button </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-group"> Radio Group </a>
+              </li>
+
+              <li>
+                <a href="/components/range"> Range </a>
+              </li>
+
+              <li>
+                <a href="/components/rating"> Rating </a>
+              </li>
+
+              <li>
+                <a href="/components/relative-time"> Relative Time </a>
+              </li>
+
+              <li>
+                <a href="/components/resize-observer"> Resize Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/select"> Select </a>
+              </li>
+
+              <li>
+                <a href="/components/skeleton"> Skeleton </a>
+              </li>
+
+              <li>
+                <a href="/components/spinner"> Spinner </a>
+              </li>
+
+              <li>
+                <a href="/components/split-panel"> Split Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/switch"> Switch </a>
+              </li>
+
+              <li>
+                <a href="/components/tab"> Tab </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-group"> Tab Group </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-panel"> Tab Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/tag"> Tag </a>
+              </li>
+
+              <li>
+                <a href="/components/textarea"> Textarea </a>
+              </li>
+
+              <li>
+                <a href="/components/tooltip"> Tooltip </a>
+              </li>
+
+              <li>
+                <a href="/components/tree"> Tree </a>
+              </li>
+
+              <li>
+                <a href="/components/tree-item"> Tree Item </a>
+              </li>
+
+              <li>
+                <a href="/components/visually-hidden"> Visually Hidden </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <h2>Design Tokens</h2>
+            <ul>
+              <li><a href="/tokens/typography">Typography</a></li>
+              <li><a href="/tokens/color">Color</a></li>
+              <li><a href="/tokens/spacing">Spacing</a></li>
+              <li><a href="/tokens/elevation">Elevation</a></li>
+              <li><a href="/tokens/border-radius">Border Radius</a></li>
+              <li><a href="/tokens/transition">Transition</a></li>
+              <li><a href="/tokens/z-index">Z-index</a></li>
+              <li><a href="/tokens/more">More Tokens</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Tutorials</h2>
+            <ul>
+              <li><a href="/tutorials/integrating-with-astro">Integrating with Astro</a></li>
+              <li><a href="/tutorials/integrating-with-laravel">Integrating with Laravel</a></li>
+              <li><a href="/tutorials/integrating-with-nextjs">Integrating with NextJS</a></li>
+              <li><a href="/tutorials/integrating-with-rails">Integrating with Rails</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <a id="main-content"></a>
+      <article id="content" class="content content--with-toc">
+        <div class="content__toc">
+          <ul>
+            <li class="top"><a href="#">Animated Image</a></li>
+            <li data-level="2"><a href="#examples" class="active">Examples</a></li>
+            <li data-level="3"><a href="#webp-images">WEBP Images</a></li>
+            <li data-level="3"><a href="#setting-a-width-and-height">Setting a Width and Height</a></li>
+            <li data-level="3"><a href="#customizing-the-control-box">Customizing the Control Box</a></li>
+            <li data-level="2"><a href="#importing">Importing</a></li>
+            <li data-level="2"><a href="#slots">Slots</a></li>
+            <li data-level="2"><a href="#properties">Properties</a></li>
+            <li data-level="2"><a href="#events">Events</a></li>
+            <li data-level="2"><a href="#custom-properties">Custom Properties</a></li>
+            <li data-level="2"><a href="#parts">Parts</a></li>
+            <li data-level="2"><a href="#dependencies">Dependencies</a></li>
+          </ul>
+        </div>
+
+        <div class="content__body">
+          <header class="component-header">
+            <h1>Animated Image</h1>
+
+            <div class="component-header__tag">
+              <code>&lt;sl-animated-image&gt; | SlAnimatedImage</code>
+            </div>
+
+            <div class="component-header__info">
+              <sl-badge variant="neutral" pill=""> Since 2.0 </sl-badge>
+              <sl-badge variant="primary" pill="" style="text-transform: capitalize"> stable </sl-badge>
+            </div>
+          </header>
+
+          <p class="component-summary">
+            A component for displaying animated GIFs and WEBPs that play and pause on interaction.
+          </p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <sl-animated-image src="https://shoelace.style/assets/images/walk.gif" alt="Animation of untied shoes walking on pavement"></sl-animated-image>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-17">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-174"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animated-image</span>
+  <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/walk.gif<span class="token punctuation">"</span></span>
+  <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of untied shoes walking on pavement<span class="token punctuation">"</span></span>
+<span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animated-image</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-174"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-175"><span class="token keyword">import</span> SlAnimatedImage <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animated-image'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimatedImage</span></span>
+    <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/walk.gif<span class="token punctuation">"</span></span>
+    <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of untied shoes walking on pavement<span class="token punctuation">"</span></span>
+  <span class="token punctuation">/&gt;</span></span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-175"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-17">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div role="alert" class="callout callout--tip">
+            <p>
+              This component uses <code>&lt;canvas&gt;</code> to draw freeze frames, so images are subject to
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image" class="external-link" rel="noopener noreferrer" target="_blank">cross-origin restrictions</a>.
+            </p>
+          </div>
+          <h2 id="examples" class="anchor-heading">
+            Examples<a href="#examples" aria-label="Direct link to &quot;Examples&quot;"></a>
+          </h2>
+          <h3 id="webp-images" class="anchor-heading">
+            WEBP Images<a href="#webp-images" aria-label="Direct link to &quot;WEBP Images&quot;"></a>
+          </h3>
+          <p>Both GIF and WEBP images are supported.</p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <sl-animated-image src="https://shoelace.style/assets/images/tie.webp" alt="Animation of a shoe being tied"></sl-animated-image>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-18">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-176"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animated-image</span>
+  <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/tie.webp<span class="token punctuation">"</span></span>
+  <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of a shoe being tied<span class="token punctuation">"</span></span>
+<span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animated-image</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-176"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-177"><span class="token keyword">import</span> SlAnimatedImage <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animated-image'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimatedImage</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/tie.webp<span class="token punctuation">"</span></span> <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of a shoe being tied<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-177"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-18">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h3 id="setting-a-width-and-height" class="anchor-heading">
+            Setting a Width and Height<a href="#setting-a-width-and-height" aria-label="Direct link to &quot;Setting a Width and Height&quot;"></a>
+          </h3>
+          <p>To set a custom size, apply a width and/or height to the host element.</p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <sl-animated-image src="https://shoelace.style/assets/images/walk.gif" alt="Animation of untied shoes walking on pavement" style="width: 150px; height: 200px">
+              </sl-animated-image>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-19">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-178"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animated-image</span>
+  <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/walk.gif<span class="token punctuation">"</span></span>
+  <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of untied shoes walking on pavement<span class="token punctuation">"</span></span>
+  <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">width</span><span class="token punctuation">:</span> 150px<span class="token punctuation">;</span> <span class="token property">height</span><span class="token punctuation">:</span> 200px<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span>
+<span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animated-image</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-178"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-179"><span class="token keyword">import</span> SlAnimatedImage <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animated-image'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimatedImage</span></span>
+    <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/walk.gif<span class="token punctuation">"</span></span>
+    <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of untied shoes walking on pavement<span class="token punctuation">"</span></span>
+    <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token literal-property property">width</span><span class="token operator">:</span> <span class="token string">'150px'</span><span class="token punctuation">,</span> <span class="token literal-property property">height</span><span class="token operator">:</span> <span class="token string">'200px'</span> <span class="token punctuation">}</span><span class="token punctuation">}</span></span>
+  <span class="token punctuation">/&gt;</span></span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-179"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-19">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h3 id="customizing-the-control-box" class="anchor-heading">
+            Customizing the Control Box<a href="#customizing-the-control-box" aria-label="Direct link to &quot;Customizing the Control Box&quot;"></a>
+          </h3>
+          <p>
+            You can change the appearance and location of the control box by targeting the <code>control-box</code> part
+            in your styles.
+          </p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <sl-animated-image src="https://shoelace.style/assets/images/walk.gif" alt="Animation of untied shoes walking on pavement" class="animated-image-custom-control-box"></sl-animated-image>
+
+              <style>
+                .animated-image-custom-control-box::part(control-box) {
+                  top: auto;
+                  right: auto;
+                  bottom: 1rem;
+                  left: 1rem;
+                  background-color: deeppink;
+                  border: none;
+                  color: pink;
+                }
+              </style>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-20">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-180"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animated-image</span>
+  <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/walk.gif<span class="token punctuation">"</span></span>
+  <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of untied shoes walking on pavement<span class="token punctuation">"</span></span>
+  <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animated-image-custom-control-box<span class="token punctuation">"</span></span>
+<span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animated-image</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token style"><span class="token language-css">
+  <span class="token selector">.animated-image-custom-control-box::part(control-box)</span> <span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+    <span class="token property">right</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+    <span class="token property">bottom</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+    <span class="token property">left</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> deeppink<span class="token punctuation">;</span>
+    <span class="token property">border</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> pink<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-180"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-181"><span class="token keyword">import</span> SlAnimatedImage <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animated-image'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> css <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  .animated-image-custom-control-box::part(control-box) {
+    top: auto;
+    right: auto;
+    bottom: 1rem;
+    left: 1rem;
+    background-color: deeppink;
+    border: none;
+    color: pink;
+  }
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimatedImage</span></span>
+      <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animated-image-custom-control-box<span class="token punctuation">"</span></span>
+      <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://shoelace.style/assets/images/walk.gif<span class="token punctuation">"</span></span>
+      <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation of untied shoes walking on pavement<span class="token punctuation">"</span></span>
+    <span class="token punctuation">/&gt;</span></span><span class="token plain-text">
+
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">{css}</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-181"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-20">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h2 id="importing" class="anchor-heading">
+            Importing<a href="#importing" aria-label="Direct link to &quot;Importing&quot;"></a>
+          </h2>
+          <p>
+            If you’re using the autoloader or the traditional loader, you can ignore this section. Otherwise, feel free
+            to use any of the following snippets to
+            <a href="/getting-started/installation#cherry-picking">cherry pick</a> this component.
+          </p>
+
+          <sl-tab-group>
+            <sl-tab slot="nav" panel="script" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-1" tabindex="0">Script</sl-tab>
+            <sl-tab slot="nav" panel="import" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-2" tabindex="0">Import</sl-tab>
+            <sl-tab slot="nav" panel="bundler" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-3" tabindex="0">Bundler</sl-tab>
+            <sl-tab slot="nav" panel="react" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-4" tabindex="0">React</sl-tab>
+
+            <sl-tab-panel name="script" id="sl-tab-panel-1" role="tabpanel" aria-hidden="true">
+              <p>
+                To import this component from
+                <a href="https://www.jsdelivr.com/package/npm/@shoelace-style/shoelace" class="external-link" rel="noopener noreferrer" target="_blank">the CDN</a>
+                using a script tag:
+              </p>
+              <pre><code class="language-html" id="code-block-182"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/animated-image/animated-image.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span></code><sl-copy-button class="copy-code-button" from="code-block-182"></sl-copy-button></pre>
+            </sl-tab-panel>
+
+            <sl-tab-panel name="import" id="sl-tab-panel-2" role="tabpanel" aria-hidden="true">
+              <p>
+                To import this component from
+                <a href="https://www.jsdelivr.com/package/npm/@shoelace-style/shoelace" class="external-link" rel="noopener noreferrer" target="_blank">the CDN</a>
+                using a JavaScript import:
+              </p>
+              <pre><code class="language-js" id="code-block-183"><span class="token keyword">import</span> <span class="token string">'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/animated-image/animated-image.js'</span><span class="token punctuation">;</span></code><sl-copy-button class="copy-code-button" from="code-block-183"></sl-copy-button></pre>
+            </sl-tab-panel>
+
+            <sl-tab-panel name="bundler" id="sl-tab-panel-3" role="tabpanel" aria-hidden="true">
+              <p>To import this component using <a href="/getting-started/installation#bundling">a bundler</a>:</p>
+              <pre><code class="language-js" id="code-block-184"><span class="token keyword">import</span> <span class="token string">'@shoelace-style/shoelace/dist/components/animated-image/animated-image.js'</span><span class="token punctuation">;</span></code><sl-copy-button class="copy-code-button" from="code-block-184"></sl-copy-button></pre>
+            </sl-tab-panel>
+
+            <sl-tab-panel name="react" id="sl-tab-panel-4" role="tabpanel" aria-hidden="true">
+              <p>To import this component as a <a href="/frameworks/react">React component</a>:</p>
+              <pre><code class="language-js" id="code-block-185"><span class="token keyword">import</span> SlAnimatedImage <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animated-image'</span><span class="token punctuation">;</span></code><sl-copy-button class="copy-code-button" from="code-block-185"></sl-copy-button></pre>
+            </sl-tab-panel>
+          </sl-tab-group>
+
+          <h2 id="slots" class="anchor-heading">Slots<a href="#slots" aria-label="Direct link to &quot;Slots&quot;"></a></h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name">Name</th>
+                  <th class="table-description">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="nowrap">
+                    <code>play-icon</code>
+                  </td>
+                  <td>
+                    Optional play icon to use instead of the default. Works best with <code>&lt;sl-icon&gt;</code>.
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="nowrap">
+                    <code>pause-icon</code>
+                  </td>
+                  <td>
+                    Optional pause icon to use instead of the default. Works best with <code>&lt;sl-icon&gt;</code>.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about <a href="/getting-started/usage#slots">using slots</a>.</em>
+          </p>
+
+          <h2 id="properties" class="anchor-heading">
+            Properties<a href="#properties" aria-label="Direct link to &quot;Properties&quot;"></a>
+          </h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name">Name</th>
+                  <th class="table-description">Description</th>
+                  <th class="table-reflects">Reflects</th>
+                  <th class="table-type">Type</th>
+                  <th class="table-default">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <code class="nowrap">src</code>
+                  </td>
+                  <td>The path to the image to load.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>string</code>
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">alt</code>
+                  </td>
+                  <td>A description of the image used by assistive devices.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>string</code>
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">play</code>
+                  </td>
+                  <td>Plays the animation. When this attribute is remove, the animation will pause.</td>
+                  <td style="text-align: center">
+                    <sl-icon label="yes" name="check-lg" role="img" aria-label="yes" library="default"></sl-icon>
+                  </td>
+                  <td>
+                    <code>boolean</code>
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td class="nowrap"><code>updateComplete</code></td>
+                  <td>
+                    A read-only promise that resolves when the component has
+                    <a href="/getting-started/usage?#component-rendering-and-updating">finished updating</a>.
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about
+              <a href="/getting-started/usage#attributes-and-properties">attributes and properties</a>.</em>
+          </p>
+
+          <h2 id="events" class="anchor-heading">Events<a href="#events" aria-label="Direct link to &quot;Events&quot;"></a></h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name" data-flavor="html">Name</th>
+                  <th class="table-name" data-flavor="react">React Event</th>
+                  <th class="table-description">Description</th>
+                  <th class="table-event-detail">Event Detail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-flavor="html"><code class="nowrap">sl-load</code></td>
+                  <td data-flavor="react"><code class="nowrap">onSlLoad</code></td>
+                  <td>Emitted when the image loads successfully.</td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td data-flavor="html"><code class="nowrap">sl-error</code></td>
+                  <td data-flavor="react"><code class="nowrap">onSlError</code></td>
+                  <td>Emitted when the image fails to load.</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about <a href="/getting-started/usage#events">events</a>.</em>
+          </p>
+
+          <h2 id="custom-properties" class="anchor-heading">
+            Custom Properties<a href="#custom-properties" aria-label="Direct link to &quot;Custom Properties&quot;"></a>
+          </h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name">Name</th>
+                  <th class="table-description">Description</th>
+                  <th class="table-default">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="nowrap"><code>--control-box-size</code></td>
+                  <td>The size of the icon box.</td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td class="nowrap"><code>--icon-size</code></td>
+                  <td>The size of the play/pause icons.</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about
+              <a href="/getting-started/customizing#custom-properties">customizing CSS custom properties</a>.</em>
+          </p>
+
+          <h2 id="parts" class="anchor-heading">Parts<a href="#parts" aria-label="Direct link to &quot;Parts&quot;"></a></h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name">Name</th>
+                  <th class="table-description">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="nowrap"><code>control-box</code></td>
+                  <td>The container that surrounds the pause/play icons and provides their background.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about <a href="/getting-started/customizing/#css-parts">customizing CSS parts</a>.</em>
+          </p>
+
+          <h2 id="dependencies" class="anchor-heading">
+            Dependencies<a href="#dependencies" aria-label="Direct link to &quot;Dependencies&quot;"></a>
+          </h2>
+
+          <p>This component automatically imports the following dependencies.</p>
+
+          <ul>
+            <li><code>&lt;sl-icon&gt;</code></li>
+          </ul>
+        </div>
+      </article>
+    </main>
+  
+
+</body></html>

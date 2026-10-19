@@ -1,0 +1,1627 @@
+<!DOCTYPE html><html lang="en" data-layout="component" data-shoelace-version="2.20.1" class="flavor-html sl-scroll-lock" style="--sl-scroll-lock-size: 0px;"><head><style type="text/css">.turbo-progress-bar {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #0076ff;
+  z-index: 2147483647;
+  transition:
+    width 300ms ease-out,
+    opacity 150ms 150ms ease-in;
+  transform: translate3d(0, 0, 0);
+}
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Animate elements declaratively with nearly 100 baked-in presets, or roll your own with custom keyframes.">
+    <title>Animation</title>
+
+    <meta name="turbo-cache-control">
+
+    <link rel="stylesheet" href="/assets/styles/docs.css">
+    <link rel="stylesheet" href="/assets/styles/code-previews.css">
+    <link rel="stylesheet" href="/assets/styles/search.css">
+
+    <link rel="icon" href="/assets/images/logo.svg" type="image/x-icon">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="shoelace_style">
+    <meta name="twitter:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <meta property="og:url" content="https://shoelace.style/components/animation/">
+    <meta property="og:title" content="Animation">
+    <meta property="og:description" content="Animate elements declaratively with nearly 100 baked-in presets, or roll your own with custom keyframes.">
+    <meta property="og:image" content="https://shoelace.style/assets/images/og-image.png">
+
+    <link rel="stylesheet" href="/dist/themes/light.css">
+    <link rel="stylesheet" href="/dist/themes/dark.css">
+    <script type="module" src="/dist/shoelace-autoloader.js"></script>
+
+    <script>
+      (() => {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.classList.toggle(
+          'sl-theme-dark',
+          theme === 'dark' || (theme === 'auto' && prefersDark)
+        );
+      })();
+    </script>
+
+    <script src="/assets/scripts/turbo.js" type="module"></script>
+    <script src="/assets/scripts/docs.js" defer=""></script>
+    <script src="/assets/scripts/code-previews.js" defer=""></script>
+    <script src="/assets/scripts/lunr.js" defer=""></script>
+    <script src="/assets/scripts/search.js" defer=""></script>
+  </head>
+  <body>
+    <a id="skip-to-main" class="visually-hidden" href="#main-content" data-smooth-link="false">
+      Skip to main content
+    </a>
+
+    <button id="menu-toggle" type="button" aria-label="Menu">
+      <svg width="148" height="148" viewBox="0 0 148 148" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="18" fill="none" fill-rule="evenodd" stroke-linecap="round">
+          <path d="M9.5 125.5h129M9.5 74.5h129M9.5 23.5h129"></path>
+        </g>
+      </svg>
+    </button>
+
+    <div id="icon-toolbar">
+      <a href="https://github.com/shoelace-style/shoelace" title="View Shoelace on GitHub" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="github" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <a href="https://twitter.com/shoelace_style" title="Follow Shoelace on Twitter" class="external-link" rel="noopener noreferrer" target="_blank">
+        <sl-icon name="twitter" aria-hidden="true" library="default"></sl-icon>
+      </a>
+
+      <sl-dropdown id="theme-selector" placement="bottom-end" distance="3">
+        <sl-button slot="trigger" size="small" variant="text" caret="" title="Press \ to toggle" data-optional="" data-valid="">
+          <sl-icon class="only-light" name="sun-fill" aria-hidden="true" library="default"></sl-icon>
+          <sl-icon class="only-dark" name="moon-fill" aria-hidden="true" library="default"></sl-icon>
+        </sl-button>
+        <sl-menu role="menu">
+          <sl-menu-item type="checkbox" value="light" tabindex="0" role="menuitemcheckbox" aria-checked="false" aria-disabled="false">Light</sl-menu-item>
+          <sl-menu-item type="checkbox" value="dark" tabindex="-1" role="menuitemcheckbox" aria-checked="false" aria-disabled="false">Dark</sl-menu-item>
+          <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+          <sl-menu-item type="checkbox" value="auto" tabindex="-1" role="menuitemcheckbox" aria-checked="true" aria-disabled="false" checked="">System</sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
+    </div>
+
+    <sl-dialog id="wa-dialog" label="Shoelace is now Web Awesome!" open="">
+      <div class="dialog-billboard">
+        <div class="dialog-billboard-content">
+          <svg class="wa-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true">
+            <path fill="currentColor" d="M372.2 116C372.2 136.9 359.8 155 342 163.2L448 256L552.4 235.1C547.1 227.4 544 218 544 208C544 181.5 565.5 160 592 160C618.5 160 640 181.5 640 208C640 234 619.4 255.1 593.6 256L481 506.3C470.7 529.3 447.8 544 422.6 544L217.4 544C192.2 544 169.4 529.2 159 506.3L46.4 256C20.6 255.1 0 234 0 208C0 181.5 21.5 160 48 160C74.5 160 96 181.5 96 208C96 218.1 92.9 227.4 87.6 235.1L192 256L298.1 163.1C280.4 154.8 268.1 136.8 268.1 116C268.1 87.3 291.4 64 320.1 64C348.8 64 372.1 87.3 372.1 116L372.2 116z"></path>
+          </svg>
+
+          <h2>
+            Shoelace is now
+            <a href="https://webawesome.com?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">Web Awesome</a>!
+          </h2>
+        </div>
+      </div>
+
+      <div class="dialog-body">
+        <p>
+          Web Awesome has an even bigger library of free
+          <a href="https://webawesome.com/docs/components/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">components</a>. Plus
+          <a href="https://webawesome.com/docs/themes/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">themes</a>,
+          <a href="https://webawesome.com/docs/utilities/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">utilities</a>,
+          <a href="https://webawesome.com/docs/patterns/?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" class="external-link" rel="noopener noreferrer">patterns</a>, and more!
+        </p>
+
+        <p><strong>Still open source. Still free. With more Awesome.</strong></p>
+
+        <sl-divider role="separator" aria-orientation="horizontal"></sl-divider>
+
+        <div class="dialog-actions">
+          <div class="wa-ctas">
+            <sl-button variant="primary" size="large" class="wa-pro-cta" href="https://webawesome.com/docs/resources/migrating-from-shoelace?utm_source=shoelace-docs&amp;utm_medium=web&amp;utm_campaign=wa-dialog" target="_blank" data-optional="" data-valid="">
+              Migrate to Web Awesome!
+              <sl-icon slot="suffix" name="arrow-right" aria-hidden="true" library="default"></sl-icon>
+            </sl-button>
+            <sl-button variant="text" class="close-wa-dialog" size="medium" data-optional="" data-valid="">No, thanks</sl-button>
+          </div>
+        </div>
+      </div>
+
+      <div slot="footer">
+        <div class="sl-status">
+          <strong>Shoelace Is Sunset with no active development</strong>
+          <p>Use Web Awesome for ongoing work, issues, and features.</p>
+        </div>
+      </div>
+    </sl-dialog>
+    <script>
+      if (!sessionStorage.getItem('wa-dialog-dismissed')) {
+        customElements.whenDefined('sl-dialog').then(() => {
+          const dialog = document.getElementById('wa-dialog');
+          const closeButton = dialog.querySelector('sl-button.close-wa-dialog');
+
+          closeButton.addEventListener('click', () => dialog.hide());
+          dialog.addEventListener(
+            'sl-after-hide',
+            () => {
+              sessionStorage.setItem('wa-dialog-dismissed', 'true');
+            },
+            { once: true }
+          );
+
+          dialog.show();
+        });
+      }
+    </script>
+
+    <aside id="sidebar" data-preserve-scroll="">
+      <header>
+        <a href="/">
+          <img src="/assets/images/wordmark.svg" alt="Shoelace">
+        </a>
+        <div class="sidebar-version">2.20.1</div>
+      </header>
+
+      <div class="sidebar-buttons">
+        <sl-button size="small" class="repo-button repo-button--github" href="https://github.com/shoelace-style/shoelace" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="github" aria-hidden="true" library="default"></sl-icon> Code
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--star" href="https://github.com/shoelace-style/shoelace/stargazers" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="star-fill" aria-hidden="true" library="default"></sl-icon> Star
+        </sl-button>
+        <sl-button size="small" class="repo-button repo-button--twitter" href="https://twitter.com/shoelace_style" target="_blank" variant="default" data-optional="" data-valid="">
+          <sl-icon slot="prefix" name="twitter" aria-hidden="true" library="default"></sl-icon> Follow
+        </sl-button>
+      </div>
+
+      <button class="search-box" type="button" title="Press / to search" aria-label="Search" data-plugin="search">
+        <sl-icon name="search" aria-hidden="true" library="default"></sl-icon>
+        <span>Search</span>
+      </button>
+
+      <nav>
+        <ul>
+          <li>
+            <h2>Getting Started</h2>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/getting-started/installation">Installation</a></li>
+              <li><a href="/getting-started/usage">Usage</a></li>
+              <li><a href="/getting-started/themes">Themes</a></li>
+              <li><a href="/getting-started/customizing">Customizing</a></li>
+              <li><a href="/getting-started/form-controls">Form Controls</a></li>
+              <li><a href="/getting-started/localization">Localization</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Frameworks</h2>
+            <ul>
+              <li><a href="/frameworks/react">React</a></li>
+              <li><a href="/frameworks/vue">Vue</a></li>
+              <li><a href="/frameworks/angular">Angular</a></li>
+              <li><a href="/frameworks/svelte">Svelte</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Resources</h2>
+            <ul>
+              <li><a href="/resources/community">Community</a></li>
+              <li>
+                <a href="https://github.com/shoelace-style/shoelace/discussions" class="external-link" rel="noopener noreferrer" target="_blank">Help &amp; Support</a>
+              </li>
+              <li><a href="/resources/accessibility">Accessibility</a></li>
+              <li><a href="/resources/contributing">Contributing</a></li>
+              <li><a href="/resources/changelog">Changelog</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Components</h2>
+            <ul>
+              <li>
+                <a href="/components/alert"> Alert </a>
+              </li>
+
+              <li>
+                <a href="/components/animated-image"> Animated Image </a>
+              </li>
+
+              <li>
+                <a href="/components/animation" class="active-link"> Animation </a>
+              </li>
+
+              <li>
+                <a href="/components/avatar"> Avatar </a>
+              </li>
+
+              <li>
+                <a href="/components/badge"> Badge </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb"> Breadcrumb </a>
+              </li>
+
+              <li>
+                <a href="/components/breadcrumb-item"> Breadcrumb Item </a>
+              </li>
+
+              <li>
+                <a href="/components/button"> Button </a>
+              </li>
+
+              <li>
+                <a href="/components/button-group"> Button Group </a>
+              </li>
+
+              <li>
+                <a href="/components/card"> Card </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel"> Carousel </a>
+              </li>
+
+              <li>
+                <a href="/components/carousel-item"> Carousel Item </a>
+              </li>
+
+              <li>
+                <a href="/components/checkbox"> Checkbox </a>
+              </li>
+
+              <li>
+                <a href="/components/color-picker"> Color Picker </a>
+              </li>
+
+              <li>
+                <a href="/components/copy-button"> Copy Button </a>
+              </li>
+
+              <li>
+                <a href="/components/details"> Details </a>
+              </li>
+
+              <li>
+                <a href="/components/dialog"> Dialog </a>
+              </li>
+
+              <li>
+                <a href="/components/divider"> Divider </a>
+              </li>
+
+              <li>
+                <a href="/components/drawer"> Drawer </a>
+              </li>
+
+              <li>
+                <a href="/components/dropdown"> Dropdown </a>
+              </li>
+
+              <li>
+                <a href="/components/format-bytes"> Format Bytes </a>
+              </li>
+
+              <li>
+                <a href="/components/format-date"> Format Date </a>
+              </li>
+
+              <li>
+                <a href="/components/format-number"> Format Number </a>
+              </li>
+
+              <li>
+                <a href="/components/icon"> Icon </a>
+              </li>
+
+              <li>
+                <a href="/components/icon-button"> Icon Button </a>
+              </li>
+
+              <li>
+                <a href="/components/image-comparer"> Image Comparer </a>
+              </li>
+
+              <li>
+                <a href="/components/include"> Include </a>
+              </li>
+
+              <li>
+                <a href="/components/input"> Input </a>
+              </li>
+
+              <li>
+                <a href="/components/menu"> Menu </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-item"> Menu Item </a>
+              </li>
+
+              <li>
+                <a href="/components/menu-label"> Menu Label </a>
+              </li>
+
+              <li>
+                <a href="/components/mutation-observer"> Mutation Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/option"> Option </a>
+              </li>
+
+              <li>
+                <a href="/components/popup"> Popup </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-bar"> Progress Bar </a>
+              </li>
+
+              <li>
+                <a href="/components/progress-ring"> Progress Ring </a>
+              </li>
+
+              <li>
+                <a href="/components/qr-code"> QR Code </a>
+              </li>
+
+              <li>
+                <a href="/components/radio"> Radio </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-button"> Radio Button </a>
+              </li>
+
+              <li>
+                <a href="/components/radio-group"> Radio Group </a>
+              </li>
+
+              <li>
+                <a href="/components/range"> Range </a>
+              </li>
+
+              <li>
+                <a href="/components/rating"> Rating </a>
+              </li>
+
+              <li>
+                <a href="/components/relative-time"> Relative Time </a>
+              </li>
+
+              <li>
+                <a href="/components/resize-observer"> Resize Observer </a>
+              </li>
+
+              <li>
+                <a href="/components/select"> Select </a>
+              </li>
+
+              <li>
+                <a href="/components/skeleton"> Skeleton </a>
+              </li>
+
+              <li>
+                <a href="/components/spinner"> Spinner </a>
+              </li>
+
+              <li>
+                <a href="/components/split-panel"> Split Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/switch"> Switch </a>
+              </li>
+
+              <li>
+                <a href="/components/tab"> Tab </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-group"> Tab Group </a>
+              </li>
+
+              <li>
+                <a href="/components/tab-panel"> Tab Panel </a>
+              </li>
+
+              <li>
+                <a href="/components/tag"> Tag </a>
+              </li>
+
+              <li>
+                <a href="/components/textarea"> Textarea </a>
+              </li>
+
+              <li>
+                <a href="/components/tooltip"> Tooltip </a>
+              </li>
+
+              <li>
+                <a href="/components/tree"> Tree </a>
+              </li>
+
+              <li>
+                <a href="/components/tree-item"> Tree Item </a>
+              </li>
+
+              <li>
+                <a href="/components/visually-hidden"> Visually Hidden </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <h2>Design Tokens</h2>
+            <ul>
+              <li><a href="/tokens/typography">Typography</a></li>
+              <li><a href="/tokens/color">Color</a></li>
+              <li><a href="/tokens/spacing">Spacing</a></li>
+              <li><a href="/tokens/elevation">Elevation</a></li>
+              <li><a href="/tokens/border-radius">Border Radius</a></li>
+              <li><a href="/tokens/transition">Transition</a></li>
+              <li><a href="/tokens/z-index">Z-index</a></li>
+              <li><a href="/tokens/more">More Tokens</a></li>
+            </ul>
+          </li>
+          <li>
+            <h2>Tutorials</h2>
+            <ul>
+              <li><a href="/tutorials/integrating-with-astro">Integrating with Astro</a></li>
+              <li><a href="/tutorials/integrating-with-laravel">Integrating with Laravel</a></li>
+              <li><a href="/tutorials/integrating-with-nextjs">Integrating with NextJS</a></li>
+              <li><a href="/tutorials/integrating-with-rails">Integrating with Rails</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <a id="main-content"></a>
+      <article id="content" class="content content--with-toc">
+        <div class="content__toc">
+          <ul>
+            <li class="top"><a href="#">Animation</a></li>
+            <li data-level="2"><a href="#examples">Examples</a></li>
+            <li data-level="3"><a href="#animations-and-easings">Animations &amp; Easings</a></li>
+            <li data-level="3"><a href="#using-intersection-observer">Using Intersection Observer</a></li>
+            <li data-level="3"><a href="#custom-keyframe-formats">Custom Keyframe Formats</a></li>
+            <li data-level="3"><a href="#playing-animations-on-demand">Playing Animations on Demand</a></li>
+            <li data-level="2"><a href="#importing">Importing</a></li>
+            <li data-level="2"><a href="#slots">Slots</a></li>
+            <li data-level="2"><a href="#properties">Properties</a></li>
+            <li data-level="2"><a href="#events">Events</a></li>
+            <li data-level="2"><a href="#methods">Methods</a></li>
+          </ul>
+        </div>
+
+        <div class="content__body">
+          <header class="component-header">
+            <h1>Animation</h1>
+
+            <div class="component-header__tag">
+              <code>&lt;sl-animation&gt; | SlAnimation</code>
+            </div>
+
+            <div class="component-header__info">
+              <sl-badge variant="neutral" pill=""> Since 2.0 </sl-badge>
+              <sl-badge variant="primary" pill="" style="text-transform: capitalize"> stable </sl-badge>
+            </div>
+          </header>
+
+          <p class="component-summary">
+            Animate elements declaratively with nearly 100 baked-in presets, or roll your own with custom keyframes.
+            Powered by the
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API" class="external-link" rel="noopener noreferrer" target="_blank">Web Animations API</a>.
+          </p>
+
+          <p>
+            To animate an element, wrap it in <code>&lt;sl-animation&gt;</code> and set an animation <code>name</code>.
+            The animation will not start until you add the <code>play</code> attribute. Refer to the
+            <a href="#properties">properties table</a> for a list of all animation options.
+          </p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <div class="animation-overview">
+                <sl-animation name="bounce" duration="2000" play=""><div class="box"></div></sl-animation>
+                <sl-animation name="jello" duration="2000" play=""><div class="box"></div></sl-animation>
+                <sl-animation name="heartBeat" duration="2000" play=""><div class="box"></div></sl-animation>
+                <sl-animation name="flip" duration="2000" play=""><div class="box"></div></sl-animation>
+              </div>
+
+              <style>
+                .animation-overview .box {
+                  display: inline-block;
+                  width: 100px;
+                  height: 100px;
+                  background-color: var(--sl-color-primary-600);
+                  margin: 1.5rem;
+                }
+              </style>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-21">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-186"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-overview<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bounce<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2000<span class="token punctuation">"</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>jello<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2000<span class="token punctuation">"</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>heartBeat<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2000<span class="token punctuation">"</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>flip<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2000<span class="token punctuation">"</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token style"><span class="token language-css">
+  <span class="token selector">.animation-overview .box</span> <span class="token punctuation">{</span>
+    <span class="token property">display</span><span class="token punctuation">:</span> inline-block<span class="token punctuation">;</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--sl-color-primary-600<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token property">margin</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-186"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-187"><span class="token keyword">import</span> SlAnimation <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animation'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> css <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  .animation-overview .box {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: var(--sl-color-primary-600);
+    margin: 1.5rem;
+  }
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-overview<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimation</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bounce<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">2000</span><span class="token punctuation">}</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlAnimation</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimation</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>jello<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">2000</span><span class="token punctuation">}</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlAnimation</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimation</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>heartBeat<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">2000</span><span class="token punctuation">}</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlAnimation</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimation</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>flip<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">2000</span><span class="token punctuation">}</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlAnimation</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">{css}</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-187"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-21">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div role="alert" class="callout callout--tip">
+            <p>
+              The animation will only be applied to the first child element found in <code>&lt;sl-animation&gt;</code>.
+            </p>
+          </div>
+          <h2 id="examples" class="anchor-heading">
+            Examples<a href="#examples" aria-label="Direct link to &quot;Examples&quot;"></a>
+          </h2>
+          <h3 id="animations-and-easings" class="anchor-heading">
+            Animations &amp; Easings<a href="#animations-and-easings" aria-label="Direct link to &quot;Animations &amp; Easings&quot;"></a>
+          </h3>
+          <p>
+            This example demonstrates all of the baked-in animations and easings. Animations are based on those found in
+            the popular
+            <a href="https://animate.style/" class="external-link" rel="noopener noreferrer" target="_blank">Animate.css</a>
+            library.
+          </p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <div class="animation-sandbox">
+                <sl-animation name="bounce" easing="ease-in-out" duration="2000" play="">
+                  <div class="box"></div>
+                </sl-animation>
+
+                <div class="controls">
+                  <sl-select label="Animation" value="bounce" size="medium" placement="bottom" form="" data-optional="" data-valid=""><sl-option role="option" aria-selected="false" aria-disabled="false" value="backInDown">backInDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="backInLeft">backInLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="backInRight">backInRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="backInUp">backInUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="backOutDown">backOutDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="backOutLeft">backOutLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="backOutRight">backOutRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="backOutUp">backOutUp</sl-option><sl-option role="option" aria-selected="true" aria-disabled="false" value="bounce">bounce</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceIn">bounceIn</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceInDown">bounceInDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceInLeft">bounceInLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceInRight">bounceInRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceInUp">bounceInUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceOut">bounceOut</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceOutDown">bounceOutDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceOutLeft">bounceOutLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceOutRight">bounceOutRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="bounceOutUp">bounceOutUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeIn">fadeIn</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInBottomLeft">fadeInBottomLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInBottomRight">fadeInBottomRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInDown">fadeInDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInDownBig">fadeInDownBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInLeft">fadeInLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInLeftBig">fadeInLeftBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInRight">fadeInRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInRightBig">fadeInRightBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInTopLeft">fadeInTopLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInTopRight">fadeInTopRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInUp">fadeInUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeInUpBig">fadeInUpBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOut">fadeOut</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutBottomLeft">fadeOutBottomLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutBottomRight">fadeOutBottomRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutDown">fadeOutDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutDownBig">fadeOutDownBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutLeft">fadeOutLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutLeftBig">fadeOutLeftBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutRight">fadeOutRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutRightBig">fadeOutRightBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutTopLeft">fadeOutTopLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutTopRight">fadeOutTopRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutUp">fadeOutUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="fadeOutUpBig">fadeOutUpBig</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="flash">flash</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="flip">flip</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="flipInX">flipInX</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="flipInY">flipInY</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="flipOutX">flipOutX</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="flipOutY">flipOutY</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="headShake">headShake</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="heartBeat">heartBeat</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="hinge">hinge</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="jackInTheBox">jackInTheBox</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="jello">jello</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="lightSpeedInLeft">lightSpeedInLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="lightSpeedInRight">lightSpeedInRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="lightSpeedOutLeft">lightSpeedOutLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="lightSpeedOutRight">lightSpeedOutRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="pulse">pulse</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rollIn">rollIn</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rollOut">rollOut</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateIn">rotateIn</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateInDownLeft">rotateInDownLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateInDownRight">rotateInDownRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateInUpLeft">rotateInUpLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateInUpRight">rotateInUpRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateOut">rotateOut</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateOutDownLeft">rotateOutDownLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateOutDownRight">rotateOutDownRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateOutUpLeft">rotateOutUpLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rotateOutUpRight">rotateOutUpRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="rubberBand">rubberBand</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="shake">shake</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="shakeX">shakeX</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="shakeY">shakeY</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideInDown">slideInDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideInLeft">slideInLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideInRight">slideInRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideInUp">slideInUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideOutDown">slideOutDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideOutLeft">slideOutLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideOutRight">slideOutRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="slideOutUp">slideOutUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="swing">swing</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="tada">tada</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="wobble">wobble</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomIn">zoomIn</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomInDown">zoomInDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomInLeft">zoomInLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomInRight">zoomInRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomInUp">zoomInUp</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomOut">zoomOut</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomOutDown">zoomOutDown</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomOutLeft">zoomOutLeft</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomOutRight">zoomOutRight</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="zoomOutUp">zoomOutUp</sl-option></sl-select>
+                  <sl-select label="Easing" value="linear" size="medium" placement="bottom" form="" data-optional="" data-valid=""><sl-option role="option" aria-selected="true" aria-disabled="false" value="linear">linear</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="ease">ease</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeIn">easeIn</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOut">easeOut</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOut">easeInOut</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInSine">easeInSine</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutSine">easeOutSine</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutSine">easeInOutSine</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInQuad">easeInQuad</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutQuad">easeOutQuad</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutQuad">easeInOutQuad</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInCubic">easeInCubic</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutCubic">easeOutCubic</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutCubic">easeInOutCubic</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInQuart">easeInQuart</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutQuart">easeOutQuart</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutQuart">easeInOutQuart</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInQuint">easeInQuint</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutQuint">easeOutQuint</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutQuint">easeInOutQuint</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInExpo">easeInExpo</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutExpo">easeOutExpo</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutExpo">easeInOutExpo</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInCirc">easeInCirc</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutCirc">easeOutCirc</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutCirc">easeInOutCirc</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInBack">easeInBack</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeOutBack">easeOutBack</sl-option><sl-option role="option" aria-selected="false" aria-disabled="false" value="easeInOutBack">easeInOutBack</sl-option></sl-select>
+                  <sl-input label="Playback Rate" type="number" min="0" max="2" step=".25" value="1" size="medium" form="" data-optional="" data-valid=""></sl-input>
+                </div>
+              </div>
+
+              <script type="module">
+                import { getAnimationNames, getEasingNames } from '/dist/utilities/animation.js';
+
+                const container = document.querySelector('.animation-sandbox');
+                const animation = container.querySelector('sl-animation');
+                const animationName = container.querySelector('.controls sl-select:nth-child(1)');
+                const easingName = container.querySelector('.controls sl-select:nth-child(2)');
+                const playbackRate = container.querySelector('sl-input[type="number"]');
+                const animations = getAnimationNames();
+                const easings = getEasingNames();
+
+                animations.map(name => {
+                  const option = Object.assign(document.createElement('sl-option'), {
+                    textContent: name,
+                    value: name
+                  });
+                  animationName.appendChild(option);
+                });
+
+                easings.map(name => {
+                  const option = Object.assign(document.createElement('sl-option'), {
+                    textContent: name,
+                    value: name
+                  });
+                  easingName.appendChild(option);
+                });
+
+                animationName.addEventListener('sl-change', () => (animation.name = animationName.value));
+                easingName.addEventListener('sl-change', () => (animation.easing = easingName.value));
+                playbackRate.addEventListener('sl-input', () => (animation.playbackRate = playbackRate.value));
+              </script>
+
+              <style>
+                .animation-sandbox .box {
+                  width: 100px;
+                  height: 100px;
+                  background-color: var(--sl-color-primary-600);
+                }
+
+                .animation-sandbox .controls {
+                  max-width: 300px;
+                  margin-top: 2rem;
+                }
+
+                .animation-sandbox .controls sl-select {
+                  margin-bottom: 1rem;
+                }
+              </style>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-22">
+              <div class="code-preview__source code-preview__source--html">
+                <pre><code class="language-html" id="code-block-188"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-sandbox<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bounce<span class="token punctuation">"</span></span> <span class="token attr-name">easing</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ease-in-out<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2000<span class="token punctuation">"</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>controls<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-select</span> <span class="token attr-name">label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Animation<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bounce<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-select</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-select</span> <span class="token attr-name">label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Easing<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>linear<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-select</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-input</span> <span class="token attr-name">label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Playback Rate<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span> <span class="token attr-name">min</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0<span class="token punctuation">"</span></span> <span class="token attr-name">max</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2<span class="token punctuation">"</span></span> <span class="token attr-name">step</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>.25<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-input</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+  <span class="token keyword">import</span> <span class="token punctuation">{</span> getAnimationNames<span class="token punctuation">,</span> getEasingNames <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'/dist/utilities/animation.js'</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> container <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.animation-sandbox'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> animation <span class="token operator">=</span> container<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'sl-animation'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> animationName <span class="token operator">=</span> container<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.controls sl-select:nth-child(1)'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> easingName <span class="token operator">=</span> container<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.controls sl-select:nth-child(2)'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> playbackRate <span class="token operator">=</span> container<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'sl-input[type="number"]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> animations <span class="token operator">=</span> <span class="token function">getAnimationNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> easings <span class="token operator">=</span> <span class="token function">getEasingNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  animations<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">name</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> option <span class="token operator">=</span> Object<span class="token punctuation">.</span><span class="token function">assign</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'sl-option'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">textContent</span><span class="token operator">:</span> name<span class="token punctuation">,</span>
+      <span class="token literal-property property">value</span><span class="token operator">:</span> name
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    animationName<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>option<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  easings<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">name</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> option <span class="token operator">=</span> Object<span class="token punctuation">.</span><span class="token function">assign</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'sl-option'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">textContent</span><span class="token operator">:</span> name<span class="token punctuation">,</span>
+      <span class="token literal-property property">value</span><span class="token operator">:</span> name
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    easingName<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>option<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  animationName<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'sl-change'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>animation<span class="token punctuation">.</span>name <span class="token operator">=</span> animationName<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  easingName<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'sl-change'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>animation<span class="token punctuation">.</span>easing <span class="token operator">=</span> easingName<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  playbackRate<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'sl-input'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>animation<span class="token punctuation">.</span>playbackRate <span class="token operator">=</span> playbackRate<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token style"><span class="token language-css">
+  <span class="token selector">.animation-sandbox .box</span> <span class="token punctuation">{</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--sl-color-primary-600<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">.animation-sandbox .controls</span> <span class="token punctuation">{</span>
+    <span class="token property">max-width</span><span class="token punctuation">:</span> 300px<span class="token punctuation">;</span>
+    <span class="token property">margin-top</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">.animation-sandbox .controls sl-select</span> <span class="token punctuation">{</span>
+    <span class="token property">margin-bottom</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-188"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-22">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h3 id="using-intersection-observer" class="anchor-heading">
+            Using Intersection Observer<a href="#using-intersection-observer" aria-label="Direct link to &quot;Using Intersection Observer&quot;"></a>
+          </h3>
+          <p>
+            Use an
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API" class="external-link" rel="noopener noreferrer" target="_blank">Intersection Observer</a>
+            to control the animation when an element enters or exits the viewport. For example, scroll the box below in
+            and out of your screen. The animation stops when the box exits the viewport and restarts each time it enters
+            the viewport.
+          </p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <div class="animation-scroll">
+                <sl-animation name="jackInTheBox" duration="2000" iterations="1"><div class="box"></div></sl-animation>
+              </div>
+
+              <script>
+                (() => {
+                  const container = document.querySelector('.animation-scroll');
+                  const animation = container.querySelector('sl-animation');
+                  const box = animation.querySelector('.box');
+
+                  // Watch for the box to enter and exit the viewport. Note that we're observing the box, not the animation element!
+                  const observer = new IntersectionObserver(entries => {
+                    if (entries[0].isIntersecting) {
+                      // Start the animation when the box enters the viewport
+                      animation.play = true;
+                    } else {
+                      animation.play = false;
+                      animation.currentTime = 0;
+                    }
+                  });
+                  observer.observe(box);
+                })();
+              </script>
+
+              <style>
+                .animation-scroll .box {
+                  display: inline-block;
+                  width: 100px;
+                  height: 100px;
+                  background-color: var(--sl-color-primary-600);
+                }
+              </style>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-23">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-189"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-scroll<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>jackInTheBox<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2000<span class="token punctuation">"</span></span> <span class="token attr-name">iterations</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+  <span class="token keyword">const</span> container <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.animation-scroll'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> animation <span class="token operator">=</span> container<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'sl-animation'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> box <span class="token operator">=</span> animation<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.box'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Watch for the box to enter and exit the viewport. Note that we're observing the box, not the animation element!</span>
+  <span class="token keyword">const</span> observer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IntersectionObserver</span><span class="token punctuation">(</span><span class="token parameter">entries</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>entries<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>isIntersecting<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">// Start the animation when the box enters the viewport</span>
+      animation<span class="token punctuation">.</span>play <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      animation<span class="token punctuation">.</span>play <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+      animation<span class="token punctuation">.</span>currentTime <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  observer<span class="token punctuation">.</span><span class="token function">observe</span><span class="token punctuation">(</span>box<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token style"><span class="token language-css">
+  <span class="token selector">.animation-scroll .box</span> <span class="token punctuation">{</span>
+    <span class="token property">display</span><span class="token punctuation">:</span> inline-block<span class="token punctuation">;</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--sl-color-primary-600<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-189"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-190"><span class="token keyword">import</span> <span class="token punctuation">{</span> useEffect<span class="token punctuation">,</span> useRef<span class="token punctuation">,</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> SlAnimation <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animation'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> css <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  .animation-scroll {
+    height: calc(100vh + 100px);
+  }
+
+  .animation-scroll .box {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: var(--sl-color-primary-600);
+  }
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> animation <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> box <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> observer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IntersectionObserver</span><span class="token punctuation">(</span><span class="token parameter">entries</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>entries<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>isIntersecting<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        animation<span class="token punctuation">.</span>current<span class="token punctuation">.</span>play <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        animation<span class="token punctuation">.</span>current<span class="token punctuation">.</span>play <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        animation<span class="token punctuation">.</span>current<span class="token punctuation">.</span>currentTime <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>box<span class="token punctuation">.</span>current<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      observer<span class="token punctuation">.</span><span class="token function">observe</span><span class="token punctuation">(</span>box<span class="token punctuation">.</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>box<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-scroll<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimation</span></span> <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>animation<span class="token punctuation">}</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>jackInTheBox<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">2000</span><span class="token punctuation">}</span></span> <span class="token attr-name">iterations</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>box<span class="token punctuation">}</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlAnimation</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">{css}</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-190"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-23">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h3 id="custom-keyframe-formats" class="anchor-heading">
+            Custom Keyframe Formats<a href="#custom-keyframe-formats" aria-label="Direct link to &quot;Custom Keyframe Formats&quot;"></a>
+          </h3>
+          <p>
+            Supply your own
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats" class="external-link" rel="noopener noreferrer" target="_blank">keyframe formats</a>
+            to build custom animations.
+          </p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <div class="animation-keyframes">
+                <sl-animation easing="ease-in-out" duration="2000" play="">
+                  <div class="box"></div>
+                </sl-animation>
+              </div>
+
+              <script>
+                (() => {
+                  const animation = document.querySelector('.animation-keyframes sl-animation');
+                  animation.keyframes = [
+                    {
+                      offset: 0,
+                      easing: 'cubic-bezier(0.250, 0.460, 0.450, 0.940)',
+                      fillMode: 'both',
+                      transformOrigin: 'center center',
+                      transform: 'rotate(0)'
+                    },
+                    {
+                      offset: 1,
+                      easing: 'cubic-bezier(0.250, 0.460, 0.450, 0.940)',
+                      fillMode: 'both',
+                      transformOrigin: 'center center',
+                      transform: 'rotate(90deg)'
+                    }
+                  ];
+                })();
+              </script>
+
+              <style>
+                .animation-keyframes .box {
+                  width: 100px;
+                  height: 100px;
+                  background-color: var(--sl-color-primary-600);
+                }
+              </style>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-24">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-191"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-keyframes<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">easing</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ease-in-out<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2000<span class="token punctuation">"</span></span> <span class="token attr-name">play</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+  <span class="token keyword">const</span> animation <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.animation-keyframes sl-animation'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  animation<span class="token punctuation">.</span>keyframes <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token literal-property property">offset</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">easing</span><span class="token operator">:</span> <span class="token string">'cubic-bezier(0.250, 0.460, 0.450, 0.940)'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">fillMode</span><span class="token operator">:</span> <span class="token string">'both'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">transformOrigin</span><span class="token operator">:</span> <span class="token string">'center center'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">transform</span><span class="token operator">:</span> <span class="token string">'rotate(0)'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      <span class="token literal-property property">offset</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">easing</span><span class="token operator">:</span> <span class="token string">'cubic-bezier(0.250, 0.460, 0.450, 0.940)'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">fillMode</span><span class="token operator">:</span> <span class="token string">'both'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">transformOrigin</span><span class="token operator">:</span> <span class="token string">'center center'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">transform</span><span class="token operator">:</span> <span class="token string">'rotate(90deg)'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token style"><span class="token language-css">
+  <span class="token selector">.animation-keyframes .box</span> <span class="token punctuation">{</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--sl-color-primary-600<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-191"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-192"><span class="token keyword">import</span> SlAnimation <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animation'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> css <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+  .animation-keyframes .box {
+    width: 100px;
+    height: 100px;
+    background-color: var(--sl-color-primary-600);
+  }
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-keyframes<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimation</span></span>
+        <span class="token attr-name">easing</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ease-in-out<span class="token punctuation">"</span></span>
+        <span class="token attr-name">duration</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">2000</span><span class="token punctuation">}</span></span>
+        <span class="token attr-name">play</span>
+        <span class="token attr-name">keyframes</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+            <span class="token literal-property property">offset</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">easing</span><span class="token operator">:</span> <span class="token string">'cubic-bezier(0.250, 0.460, 0.450, 0.940)'</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">fillMode</span><span class="token operator">:</span> <span class="token string">'both'</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">transformOrigin</span><span class="token operator">:</span> <span class="token string">'center center'</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">transform</span><span class="token operator">:</span> <span class="token string">'rotate(0)'</span>
+          <span class="token punctuation">}</span><span class="token punctuation">,</span>
+          <span class="token punctuation">{</span>
+            <span class="token literal-property property">offset</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">easing</span><span class="token operator">:</span> <span class="token string">'cubic-bezier(0.250, 0.460, 0.450, 0.940)'</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">fillMode</span><span class="token operator">:</span> <span class="token string">'both'</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">transformOrigin</span><span class="token operator">:</span> <span class="token string">'center center'</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">transform</span><span class="token operator">:</span> <span class="token string">'rotate(90deg)'</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span><span class="token punctuation">}</span></span>
+      <span class="token punctuation">&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlAnimation</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">{css}</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-192"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-24">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h3 id="playing-animations-on-demand" class="anchor-heading">
+            Playing Animations on Demand<a href="#playing-animations-on-demand" aria-label="Direct link to &quot;Playing Animations on Demand&quot;"></a>
+          </h3>
+          <p>
+            Animations won’t play until you apply the <code>play</code> attribute. You can omit it initially, then apply
+            it on demand such as after a user interaction. In this example, the button will animate once every time the
+            button is clicked.
+          </p>
+
+          <div class="code-preview">
+            <div class="code-preview__preview">
+              <div class="animation-form">
+                <sl-animation name="rubberBand" duration="1000" iterations="1">
+                  <sl-button variant="primary" size="medium" data-optional="" data-valid="">Click me</sl-button>
+                </sl-animation>
+              </div>
+
+              <script>
+                (() => {
+                  const container = document.querySelector('.animation-form');
+                  const animation = container.querySelector('sl-animation');
+                  const button = container.querySelector('sl-button');
+
+                  button.addEventListener('click', () => {
+                    animation.play = true;
+                  });
+                })();
+              </script>
+
+              <div class="code-preview__resizer">
+                <sl-icon name="grip-vertical" aria-hidden="true" library="default"></sl-icon>
+              </div>
+            </div>
+
+            <div class="code-preview__source-group" id="code-preview-source-group-25">
+              <div class="code-preview__source code-preview__source--html" data-flavor="html">
+                <pre><code class="language-html" id="code-block-193"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-form<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-animation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>rubberBand<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1000<span class="token punctuation">"</span></span> <span class="token attr-name">iterations</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sl-button</span> <span class="token attr-name">variant</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>primary<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Click me<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-button</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sl-animation</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+  <span class="token keyword">const</span> container <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.animation-form'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> animation <span class="token operator">=</span> container<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'sl-animation'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> button <span class="token operator">=</span> container<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'sl-button'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  button<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'click'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    animation<span class="token punctuation">.</span>play <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+</code><sl-copy-button class="copy-code-button" from="code-block-193"></sl-copy-button></pre>
+              </div>
+
+              <div class="code-preview__source code-preview__source--react" data-flavor="react">
+                <pre><code class="language-jsx" id="code-block-194"><span class="token keyword">import</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> SlAnimation <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animation'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> SlButton <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/button'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>play<span class="token punctuation">,</span> setPlay<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>animation-form<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlAnimation</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>rubberBand<span class="token punctuation">"</span></span> <span class="token attr-name">duration</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">1000</span><span class="token punctuation">}</span></span> <span class="token attr-name">iterations</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">}</span></span> <span class="token attr-name">play</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>play<span class="token punctuation">}</span></span> <span class="token attr-name">onSlFinish</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">setPlay</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SlButton</span></span> <span class="token attr-name">variant</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>primary<span class="token punctuation">"</span></span> <span class="token attr-name">onClick</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">setPlay</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+          Click me
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlButton</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SlAnimation</span></span><span class="token punctuation">&gt;</span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code><sl-copy-button class="copy-code-button" from="code-block-194"></sl-copy-button></pre>
+              </div>
+            </div>
+
+            <div class="code-preview__buttons">
+              <button type="button" class="code-preview__button code-preview__toggle" aria-expanded="false" aria-controls="code-preview-source-group-25">
+                Source
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <button type="button" title="Show HTML code" class="code-preview__button code-preview__button--html code-preview__button--selected">
+                HTML
+              </button>
+
+              <button type="button" title="Show React code" class="code-preview__button code-preview__button--react">
+                React
+              </button>
+
+              <button type="button" class="code-preview__button code-preview__button--codepen" title="Edit on CodePen">
+                <svg width="138" height="26" viewBox="0 0 138 26" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h2 id="importing" class="anchor-heading">
+            Importing<a href="#importing" aria-label="Direct link to &quot;Importing&quot;"></a>
+          </h2>
+          <p>
+            If you’re using the autoloader or the traditional loader, you can ignore this section. Otherwise, feel free
+            to use any of the following snippets to
+            <a href="/getting-started/installation#cherry-picking">cherry pick</a> this component.
+          </p>
+
+          <sl-tab-group>
+            <sl-tab slot="nav" panel="script" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-1" tabindex="0">Script</sl-tab>
+            <sl-tab slot="nav" panel="import" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-2" tabindex="0">Import</sl-tab>
+            <sl-tab slot="nav" panel="bundler" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-3" tabindex="0">Bundler</sl-tab>
+            <sl-tab slot="nav" panel="react" role="tab" aria-disabled="false" aria-selected="false" id="sl-tab-4" tabindex="0">React</sl-tab>
+
+            <sl-tab-panel name="script" id="sl-tab-panel-1" role="tabpanel" aria-hidden="true">
+              <p>
+                To import this component from
+                <a href="https://www.jsdelivr.com/package/npm/@shoelace-style/shoelace" class="external-link" rel="noopener noreferrer" target="_blank">the CDN</a>
+                using a script tag:
+              </p>
+              <pre><code class="language-html" id="code-block-195"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/animation/animation.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span></code><sl-copy-button class="copy-code-button" from="code-block-195"></sl-copy-button></pre>
+            </sl-tab-panel>
+
+            <sl-tab-panel name="import" id="sl-tab-panel-2" role="tabpanel" aria-hidden="true">
+              <p>
+                To import this component from
+                <a href="https://www.jsdelivr.com/package/npm/@shoelace-style/shoelace" class="external-link" rel="noopener noreferrer" target="_blank">the CDN</a>
+                using a JavaScript import:
+              </p>
+              <pre><code class="language-js" id="code-block-196"><span class="token keyword">import</span> <span class="token string">'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/animation/animation.js'</span><span class="token punctuation">;</span></code><sl-copy-button class="copy-code-button" from="code-block-196"></sl-copy-button></pre>
+            </sl-tab-panel>
+
+            <sl-tab-panel name="bundler" id="sl-tab-panel-3" role="tabpanel" aria-hidden="true">
+              <p>To import this component using <a href="/getting-started/installation#bundling">a bundler</a>:</p>
+              <pre><code class="language-js" id="code-block-197"><span class="token keyword">import</span> <span class="token string">'@shoelace-style/shoelace/dist/components/animation/animation.js'</span><span class="token punctuation">;</span></code><sl-copy-button class="copy-code-button" from="code-block-197"></sl-copy-button></pre>
+            </sl-tab-panel>
+
+            <sl-tab-panel name="react" id="sl-tab-panel-4" role="tabpanel" aria-hidden="true">
+              <p>To import this component as a <a href="/frameworks/react">React component</a>:</p>
+              <pre><code class="language-js" id="code-block-198"><span class="token keyword">import</span> SlAnimation <span class="token keyword">from</span> <span class="token string">'@shoelace-style/shoelace/dist/react/animation'</span><span class="token punctuation">;</span></code><sl-copy-button class="copy-code-button" from="code-block-198"></sl-copy-button></pre>
+            </sl-tab-panel>
+          </sl-tab-group>
+
+          <h2 id="slots" class="anchor-heading">Slots<a href="#slots" aria-label="Direct link to &quot;Slots&quot;"></a></h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name">Name</th>
+                  <th class="table-description">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="nowrap">(default)</td>
+                  <td>
+                    The element to animate. Avoid slotting in more than one element, as subsequent ones will be ignored.
+                    To animate multiple elements, either wrap them in a single container or use multiple
+                    <code>&lt;sl-animation&gt;</code> elements.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about <a href="/getting-started/usage#slots">using slots</a>.</em>
+          </p>
+
+          <h2 id="properties" class="anchor-heading">
+            Properties<a href="#properties" aria-label="Direct link to &quot;Properties&quot;"></a>
+          </h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name">Name</th>
+                  <th class="table-description">Description</th>
+                  <th class="table-reflects">Reflects</th>
+                  <th class="table-type">Type</th>
+                  <th class="table-default">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <code class="nowrap">name</code>
+                  </td>
+                  <td>
+                    The name of the built-in animation to use. For custom animations, use the
+                    <code>keyframes</code> prop.
+                  </td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>string</code>
+                  </td>
+                  <td>
+                    <code>'none'</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">play</code>
+                  </td>
+                  <td>
+                    Plays the animation. When omitted, the animation will be paused. This attribute will be
+                    automatically removed when the animation finishes or gets canceled.
+                  </td>
+                  <td style="text-align: center">
+                    <sl-icon label="yes" name="check-lg" role="img" aria-label="yes" library="default"></sl-icon>
+                  </td>
+                  <td>
+                    <code>boolean</code>
+                  </td>
+                  <td>
+                    <code>false</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">delay</code>
+                  </td>
+                  <td>The number of milliseconds to delay the start of the animation.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>number</code>
+                  </td>
+                  <td>
+                    <code>0</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">direction</code>
+                  </td>
+                  <td>
+                    Determines the direction of playback as well as the behavior when reaching the end of an iteration.
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction" class="external-link" rel="noopener noreferrer" target="_blank">Learn more</a>
+                  </td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>PlaybackDirection</code>
+                  </td>
+                  <td>
+                    <code>'normal'</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">duration</code>
+                  </td>
+                  <td>The number of milliseconds each iteration of the animation takes to complete.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>number</code>
+                  </td>
+                  <td>
+                    <code>1000</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">easing</code>
+                  </td>
+                  <td>
+                    The easing function to use for the animation. This can be a Shoelace easing function or a custom
+                    easing function such as <code>cubic-bezier(0, 1, .76, 1.14)</code>.
+                  </td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>string</code>
+                  </td>
+                  <td>
+                    <code>'linear'</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">endDelay</code>
+
+                    <br>
+                    <sl-tooltip content="This attribute is different from its property">
+                      <small>
+                        <code class="nowrap"> end-delay </code>
+                      </small>
+                    </sl-tooltip>
+                  </td>
+                  <td>The number of milliseconds to delay after the active period of an animation sequence.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>number</code>
+                  </td>
+                  <td>
+                    <code>0</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">fill</code>
+                  </td>
+                  <td>Sets how the animation applies styles to its target before and after its execution.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>FillMode</code>
+                  </td>
+                  <td>
+                    <code>'auto'</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">iterations</code>
+                  </td>
+                  <td>
+                    The number of iterations to run before the animation completes. Defaults to <code>Infinity</code>,
+                    which loops.
+                  </td>
+                  <td style="text-align: center"></td>
+                  <td>-</td>
+                  <td>
+                    <code>Infinity</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">iterationStart</code>
+
+                    <br>
+                    <sl-tooltip content="This attribute is different from its property">
+                      <small>
+                        <code class="nowrap"> iteration-start </code>
+                      </small>
+                    </sl-tooltip>
+                  </td>
+                  <td>The offset at which to start the animation, usually between 0 (start) and 1 (end).</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>number</code>
+                  </td>
+                  <td>
+                    <code>0</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">keyframes</code>
+                  </td>
+                  <td>The keyframes to use for the animation. If this is set, <code>name</code> will be ignored.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>Keyframe[] | undefined</code>
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">playbackRate</code>
+
+                    <br>
+                    <sl-tooltip content="This attribute is different from its property">
+                      <small>
+                        <code class="nowrap"> playback-rate </code>
+                      </small>
+                    </sl-tooltip>
+                  </td>
+                  <td>
+                    Sets the animation’s playback rate. The default is <code>1</code>, which plays the animation at a
+                    normal speed. Setting this to <code>2</code>, for example, will double the animation’s speed. A
+                    negative value can be used to reverse the animation. This value can be changed without causing the
+                    animation to restart.
+                  </td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>number</code>
+                  </td>
+                  <td>
+                    <code>1</code>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <code class="nowrap">currentTime</code>
+                  </td>
+                  <td>Gets and sets the current animation time.</td>
+                  <td style="text-align: center"></td>
+                  <td>
+                    <code>CSSNumberish</code>
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td class="nowrap"><code>updateComplete</code></td>
+                  <td>
+                    A read-only promise that resolves when the component has
+                    <a href="/getting-started/usage?#component-rendering-and-updating">finished updating</a>.
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about
+              <a href="/getting-started/usage#attributes-and-properties">attributes and properties</a>.</em>
+          </p>
+
+          <h2 id="events" class="anchor-heading">Events<a href="#events" aria-label="Direct link to &quot;Events&quot;"></a></h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name" data-flavor="html">Name</th>
+                  <th class="table-name" data-flavor="react">React Event</th>
+                  <th class="table-description">Description</th>
+                  <th class="table-event-detail">Event Detail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-flavor="html"><code class="nowrap">sl-cancel</code></td>
+                  <td data-flavor="react"><code class="nowrap">onSlCancel</code></td>
+                  <td>Emitted when the animation is canceled.</td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td data-flavor="html"><code class="nowrap">sl-finish</code></td>
+                  <td data-flavor="react"><code class="nowrap">onSlFinish</code></td>
+                  <td>Emitted when the animation finishes.</td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td data-flavor="html"><code class="nowrap">sl-start</code></td>
+                  <td data-flavor="react"><code class="nowrap">onSlStart</code></td>
+                  <td>Emitted when the animation starts or restarts.</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about <a href="/getting-started/usage#events">events</a>.</em>
+          </p>
+
+          <h2 id="methods" class="anchor-heading">
+            Methods<a href="#methods" aria-label="Direct link to &quot;Methods&quot;"></a>
+          </h2>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="table-name">Name</th>
+                  <th class="table-description">Description</th>
+                  <th class="table-arguments">Arguments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="nowrap"><code>cancel()</code></td>
+                  <td>Clears all keyframe effects caused by this animation and aborts its playback.</td>
+                  <td>-</td>
+                </tr>
+
+                <tr>
+                  <td class="nowrap"><code>finish()</code></td>
+                  <td>
+                    Sets the playback time to the end of the animation corresponding to the current playback direction.
+                  </td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <em>Learn more about <a href="/getting-started/usage#methods">methods</a>.</em>
+          </p>
+        </div>
+      </article>
+    </main>
+  
+
+</body></html>
