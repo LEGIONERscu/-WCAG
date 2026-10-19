@@ -1,0 +1,10 @@
+:HL["/_next/static/chunks/14itwvo3v0p53.css","style"]
+:HL["/_next/static/chunks/1yxq7n_f2a7km.css","style"]
+:HL["/_next/static/chunks/324lvqa2w_1vw.css","style"]
+:HL["/_next/static/chunks/15vdxrzhob4vr.css","style"]
+:HL["/_next/static/chunks/2lh8zg7jzz4mb.css","style"]
+:HL["/_next/static/media/adobe_text_pro_regular-s.p.0bu30dq31u-dm.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/soehne_mono_web_buch-s.p.3nmze-kwffxt2.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/untitled_sans_medium_v2-s.p.00evn3s1l2cjv.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/untitled_sans_regular_v2-s.p.27a5nw_p_ya4c.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"primitives","param":null,"prefetchHints":0,"slots":{"children":{"name":"docs","param":null,"prefetchHints":0,"slots":{"children":{"name":"guides","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"animation","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}}}},"staleTime":300,"buildId":"jC6k949nH9gw9rTVveHLH"}
