@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Державна установа — приклад (AFTER)</title>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="#main">Перейти до змісту</a>
+      <a href="/">Головна</a>
+      <a href="/services">Послуги</a>
+      <a href="/contacts">Контакти</a>
+    </nav>
+  </header>
+
+  <!-- Виправлено: h1 — найвищий заголовок сторінки. -->
+  <main id="main">
+    <h1>Реєстрація звернень громадян</h1>
+    <p style="color: #595959; background: #ffffff;">
+      Цей текст має достатній контраст (приблизно 7:1) — виправлено з
+      попередніх 2.3:1.
+    </p>
+
+    <p>
+      Заповніть форму нижче, щоб подати звернення до установи.
+    </p>
+
+    <img src="/assets/photo.jpg" alt="Заявник заповнює паперову форму звернення у приймальні установи" width="320" height="180">
+
+    <form>
+      <label for="full-name">ПІБ заявника</label>
+      <input id="full-name" type="text" name="fullName">
+
+      <label for="subject">Тема звернення</label>
+      <input id="subject" type="text" name="subject">
+
+      <button type="submit">Надіслати</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>© Державна установа, 2026</p>
+  </footer>
+</body>
+</html>

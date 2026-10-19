@@ -1,0 +1,47 @@
+[
+ {
+  "page": "static-html",
+  "architecture": "Семантичний server-rendered HTML (gov/CMS-патерн)",
+  "defects": [
+   { "ruleId": "heading-h1-missing", "module": "heading_validator", "wcagCriterion": "1.3.1", "expectedIn": "before" },
+   { "ruleId": "contrast-insufficient", "module": "contrast_analyzer", "wcagCriterion": "1.4.3", "expectedIn": "before" },
+   { "ruleId": "image-alt-generic-or-filename", "module": "label_analyzer", "wcagCriterion": "1.1.1", "expectedIn": "before" },
+   { "ruleId": "keyboard-positive-tabindex", "module": "keyboard_flow", "wcagCriterion": "2.4.3", "expectedIn": "before" }
+  ]
+ },
+ {
+  "page": "spa-hydration",
+  "architecture": "Клієнтський SPA-віджет (модалка, fixed-хедер)",
+  "defects": [
+   { "ruleId": "keyboard-trap", "module": "keyboard_flow", "wcagCriterion": "2.1.2", "expectedIn": "before" },
+   { "ruleId": "focus-obscured-minimum", "module": "keyboard_flow", "wcagCriterion": "2.4.11", "expectedIn": "before" },
+   { "ruleId": "keyboard-no-focus-indicator", "module": "keyboard_flow", "wcagCriterion": "2.4.7", "expectedIn": "before" }
+  ]
+ },
+ {
+  "page": "shadow-dom",
+  "architecture": "Custom element з відкритим shadow root",
+  "note": "Навмисно лише getComputedStyle/styleSheets-based модулі (contrast_analyzer, motion_detector) — ці РЕКУРСЯТЬ у shadow DOM за задокументованим дизайном. querySelectorAll-based модулі (heading_validator, reading_level, keyboard_flow) свідомо НЕ рекурсять — не частина цього fixture, не регресія.",
+  "defects": [
+   { "ruleId": "contrast-insufficient", "module": "contrast_analyzer", "wcagCriterion": "1.4.3", "expectedIn": "before" },
+   { "ruleId": "motion-autoplay-no-control", "module": "motion_detector", "wcagCriterion": "2.2.2", "expectedIn": "before" }
+  ]
+ },
+ {
+  "page": "div-soup-layout",
+  "architecture": "Div-only верстка без landmark/семантичних тегів",
+  "note": "reading-level-above-page-average — ТОЙ САМИЙ текст в before і after (дефект 3.1.5 не 'виправлений' як такий). before: div-обгортка, модуль скоупований на 'article p, main p' і МОВЧИТЬ — документований, 3× підтверджений пробіл (rada.gov.ua, andrewwestley.co.uk), очікувана класифікація СЬОГОДНІ FN, не регресія. after: та сама розмітка всередині <main> — модуль МАЄ побачити.",
+  "defects": [
+   { "ruleId": "heading-h1-missing", "module": "heading_validator", "wcagCriterion": "1.3.1", "expectedIn": "before" },
+   { "ruleId": "reading-level-above-page-average", "module": "reading_level", "wcagCriterion": "3.1.5", "expectedIn": "after", "knownGapInBefore": true }
+  ]
+ },
+ {
+  "page": "narrow-viewport-reflow",
+  "architecture": "Фіксована ширина / вузький viewport (320px CSS px)",
+  "defects": [
+   { "ruleId": "reflow-horizontal-scroll-320", "module": "reflow_analyzer", "wcagCriterion": "1.4.10", "expectedIn": "before" },
+   { "ruleId": "target-size-too-small", "module": "keyboard_flow", "wcagCriterion": "2.5.8", "expectedIn": "before" }
+  ]
+ }
+]

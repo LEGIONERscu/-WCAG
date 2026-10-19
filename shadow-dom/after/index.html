@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web Components — приклад (AFTER)</title>
+</head>
+<body>
+  <h1>Картка товару (custom element, open shadow root)</h1>
+
+  <product-card></product-card>
+
+  <script>
+    class ProductCard extends HTMLElement {
+      connectedCallback() {
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.innerHTML = `
+          <style>
+            .price {
+              /* Виправлено: ~12.6:1. */
+              color: #333333;
+              background: #ffffff;
+              font-size: 16px;
+            }
+          </style>
+          <div class="price">Ціна: 1 299 грн</div>
+          <!-- Виправлено: muted + controls — користувач може зупинити. -->
+          <video muted controls width="240" height="135">
+            <source src="/assets/demo.mp4" type="video/mp4">
+          </video>
+        `;
+      }
+    }
+    customElements.define('product-card', ProductCard);
+  </script>
+</body>
+</html>

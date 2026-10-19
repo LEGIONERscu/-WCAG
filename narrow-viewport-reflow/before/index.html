@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фіксована ширина — приклад (BEFORE)</title>
+<style>
+  /* Дефект: reflow-horizontal-scroll-320 — той самий клас, що й W3C BAD
+     demo (800px/768px фіксована ширина), тут власний, стабільний приклад:
+     блок ширший за 320px CSS px viewport, що reflow_analyzer емулює. */
+  .layout {
+    width: 600px;
+  }
+
+  .icon-row { display: flex; gap: 2px; }
+  /* Дефект: target-size-too-small — 16×16px, впритул одна до одної. */
+  .icon-button {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+  }
+</style>
+</head>
+<body>
+  <h1>Таблиця тарифів</h1>
+  <div class="layout">
+    <table border="1">
+      <tr><th>План</th><th>Ціна/міс</th><th>Трафік</th><th>Підтримка</th><th>SLA</th></tr>
+      <tr><td>Базовий</td><td>199 грн</td><td>100 ГБ</td><td>Email</td><td>99.0%</td></tr>
+      <tr><td>Про</td><td>499 грн</td><td>1 ТБ</td><td>Чат + Email</td><td>99.9%</td></tr>
+    </table>
+  </div>
+
+  <div class="icon-row">
+    <button class="icon-button" aria-label="Редагувати"></button>
+    <button class="icon-button" aria-label="Дублювати"></button>
+    <button class="icon-button" aria-label="Видалити"></button>
+  </div>
+</body>
+</html>

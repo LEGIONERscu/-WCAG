@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web Components — приклад (BEFORE)</title>
+</head>
+<body>
+  <h1>Картка товару (custom element, open shadow root)</h1>
+
+  <!--
+    Навмисно тестує документовану межу scope (keyboard-flow.ts, вступний
+    коментар): getComputedStyle/styleSheets-based модулі (contrast_analyzer,
+    motion_detector) РЕКУРСЯТЬ у відкриті shadow roots, querySelectorAll-
+    based модулі (heading_validator, reading_level, keyboard_flow) — НІ.
+    Тут навмисно лише дефекти з ПЕРШОЇ групи — другу групу тут свідомо не
+    перевіряємо (задокументований non-goal, не регресія).
+  -->
+  <product-card></product-card>
+
+  <script>
+    class ProductCard extends HTMLElement {
+      connectedCallback() {
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.innerHTML = `
+          <style>
+            .price {
+              /* Дефект: contrast-insufficient — приблизно 1.6:1 всередині
+                 shadow root. */
+              color: #cccccc;
+              background: #ffffff;
+              font-size: 16px;
+            }
+          </style>
+          <div class="price">Ціна: 1 299 грн</div>
+          <!-- Дефект: motion-autoplay-no-control — autoplay без muted і
+               без controls, усередині shadow root. -->
+          <video autoplay loop width="240" height="135">
+            <source src="/assets/demo.mp4" type="video/mp4">
+          </video>
+        `;
+      }
+    }
+    customElements.define('product-card', ProductCard);
+  </script>
+</body>
+</html>

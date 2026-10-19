@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Державна установа — приклад (BEFORE)</title>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="#main">Перейти до змісту</a>
+      <a href="/">Головна</a>
+      <a href="/services">Послуги</a>
+      <a href="/contacts" tabindex="5">Контакти</a>
+    </nav>
+  </header>
+
+  <!-- Дефект: heading-h1-missing — найвищий заголовок тут h2, h1 немає взагалі. -->
+  <main id="main">
+    <h2>Реєстрація звернень громадян</h2>
+    <p style="color: #aaaaaa; background: #ffffff;">
+      Цей текст навмисно має недостатній контраст (приблизно 2.3:1 замість
+      мінімальних 4.5:1) для перевірки модуля contrast_analyzer.
+    </p>
+
+    <p>
+      Заповніть форму нижче, щоб подати звернення до установи.
+    </p>
+
+    <img src="/assets/photo.jpg" alt="photo.jpg" width="320" height="180">
+
+    <form>
+      <label for="full-name">ПІБ заявника</label>
+      <input id="full-name" type="text" name="fullName">
+
+      <label for="subject">Тема звернення</label>
+      <input id="subject" type="text" name="subject">
+
+      <button type="submit">Надіслати</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>© Державна установа, 2026</p>
+  </footer>
+</body>
+</html>

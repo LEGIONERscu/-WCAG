@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Адаптивна ширина — приклад (AFTER)</title>
+<style>
+  /* Виправлено: тягнеться під viewport, що б не сталось — таблиця
+     скролиться ВСЕРЕДИНІ себе (overflow-x: auto на обгортці), не документ
+     в цілому. */
+  .layout {
+    max-width: 100%;
+  }
+  .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .icon-row { display: flex; gap: 12px; }
+  /* Виправлено: 24×24px + відступ. */
+  .icon-button {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+  }
+</style>
+</head>
+<body>
+  <h1>Таблиця тарифів</h1>
+  <div class="layout">
+    <div class="table-scroll">
+      <table border="1">
+        <tr><th>План</th><th>Ціна/міс</th><th>Трафік</th><th>Підтримка</th><th>SLA</th></tr>
+        <tr><td>Базовий</td><td>199 грн</td><td>100 ГБ</td><td>Email</td><td>99.0%</td></tr>
+        <tr><td>Про</td><td>499 грн</td><td>1 ТБ</td><td>Чат + Email</td><td>99.9%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="icon-row">
+    <button class="icon-button" aria-label="Редагувати"></button>
+    <button class="icon-button" aria-label="Дублювати"></button>
+    <button class="icon-button" aria-label="Видалити"></button>
+  </div>
+</body>
+</html>
